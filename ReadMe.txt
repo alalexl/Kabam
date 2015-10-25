@@ -1,5 +1,5 @@
 Sang Woon Lee sangwoon@usc.edu 
 Ayush Saraswat asaraswa@usc.edu 30303
-Mark Gauderman
+Mark Gauderman mgauderm@usc.edu
 Kevin Tan
 Alex Leung
