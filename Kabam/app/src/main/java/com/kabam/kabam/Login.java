@@ -1,9 +1,13 @@
 package com.kabam.kabam;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,56 +20,71 @@ import com.facebook.FacebookException;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.parse.LogInCallback;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.ParseException;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Ayush on 11/16/15.
  */
 public class Login extends FragmentActivity {
 
-    CallbackManager callbackManager;
+    private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-
-        callbackManager = CallbackManager.Factory.create();
-        LoginButton loginButton = (LoginButton) findViewById(R.id.facebook_login);
-        loginButton.setReadPermissions("user_friends");
-
-        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-            public void onSuccess(LoginResult loginResult) {
-                // App code
-
-            }
-
-            @Override
-            public void onCancel() {
-                // App code
-            }
-
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
     }
 
-    public void loginButtonPressed(View view) {
+    public void onLoginClick(View view) {
+        progressDialog = ProgressDialog.show(Login.this, "", "Logging In...", true);
+
         String email = ((EditText) findViewById(R.id.email)).getText().toString();
         String password = ((EditText) findViewById(R.id.password)).getText().toString();
         ParseUser.logInInBackground(email, password, new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
-                if (user != null) {
-                    // If user exist and authenticated, send user to Welcome.class
-                    Toast.makeText(getApplicationContext(), "Blah Logged In", Toast.LENGTH_SHORT).show();
+                progressDialog.dismiss();
+                if (user == null) {
+                    Toast.makeText(getApplicationContext(), "Blah Can't Log In", Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Blah Can't Sign In", Toast.LENGTH_SHORT).show();
+                    finishLogin();
+                    Toast.makeText(getApplicationContext(), "Blah Logged In", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+    }
+
+    public void onFacebookLoginClick(View view) {
+        progressDialog = ProgressDialog.show(Login.this, "", "Logging In...", true);
+
+        List<String> permissions = Arrays.asList("public_profile", "email");
+        ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions, new LogInCallback() {
+            public void done(ParseUser user, ParseException err) {
+                progressDialog.dismiss();
+                if (user == null) {
+                    Log.d("FB_L", "Unable to log in");
+                } else if (user.isNew()) {
+                    Log.d("FB_L", "Logged in as new user");
+                    finishLogin();
+                } else {
+                    Log.d("FB_L", "Logged in as old user");
+                    finishLogin();
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private void finishLogin() {
+        finish();
     }
 }

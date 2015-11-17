@@ -8,6 +8,7 @@ import android.view.MenuItem;
 
 import com.facebook.FacebookSdk;
 import com.parse.Parse;
+import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
@@ -18,12 +19,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Initialize FacebookSDK
+        FacebookSdk.sdkInitialize(getApplicationContext());
+
         // Initialize Parse
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "TnpAVtQJyj1fBngIFSKjRcWuMh3g8VwtWsjXw2sV", "oZZa2IMMaFQOgV20qLA84DkqWWCA8EpUDWZeUHV9");
-
-        // Initialize FacebookSDK
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        ParseFacebookUtils.initialize(getApplicationContext());
 
         // Show Login Page if User isn't logged in
         if (ParseUser.getCurrentUser() == null) {

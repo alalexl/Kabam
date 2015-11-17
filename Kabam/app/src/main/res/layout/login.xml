@@ -28,7 +28,7 @@
         android:text="Login"
         android:id="@+id/email_login"
         android:layout_gravity="center_horizontal"
-        android:onClick="loginButtonPressed" />
+        android:onClick="onLoginClick" />
 
     <com.facebook.login.widget.LoginButton
         android:id="@+id/facebook_login"
@@ -36,7 +36,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"
-        android:layout_marginBottom="30dp" />
+        android:layout_marginBottom="30dp"
+        android:onClick="onFacebookLoginClick" />
 
     <Button
         android:layout_width="wrap_content"
