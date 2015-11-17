@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -25,10 +26,10 @@ import com.facebook.GraphResponse;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.parse.LogInCallback;
-import com.parse.Parse;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseUser;
 import com.parse.ParseException;
+import com.parse.SignUpCallback;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -39,35 +40,64 @@ import java.util.List;
 /**
  * Created by Ayush on 11/16/15.
  */
-public class Login extends FragmentActivity {
+public class Signup extends FragmentActivity {
 
     private Dialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.login);
+        setContentView(R.layout.signup);
+
+        getActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    public void onLoginClick(View view) {
-        progressDialog = ProgressDialog.show(Login.this, "", "Logging In...", true);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finishSignup();
+            return true;
+        }
 
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void onCreateAccountClick(View view) {
+        String firstName = ((EditText) findViewById(R.id.firstName)).getText().toString();
+        String lastName = ((EditText) findViewById(R.id.lastName)).getText().toString();
         String email = ((EditText) findViewById(R.id.email)).getText().toString();
         String password = ((EditText) findViewById(R.id.password)).getText().toString();
+        String confirmPassword = ((EditText) findViewById(R.id.confirmPassword)).getText().toString();
 
-        if (email.length() == 0)
+        if (firstName.length() == 0)
+            displayErrorMessage("Enter a first name!");
+        else if (lastName.length() == 0)
+            displayErrorMessage("Enter a last name!");
+        else if (email.length() == 0)
             displayErrorMessage("Enter an email address!");
         else if (password.length() == 0)
             displayErrorMessage("Enter a password!");
+        else if (password.length() != confirmPassword.length() || !password.equals(confirmPassword))
+            displayErrorMessage("Ensure the password and confirm password match.");
         else {
-            ParseUser.logInInBackground(email, password, new LogInCallback() {
-                public void done(ParseUser user, ParseException e) {
+            progressDialog = ProgressDialog.show(Signup.this, "", "Signing Up...", true);
+
+            ParseUser user = new ParseUser();
+            user.setUsername(email);
+            user.setEmail(email);
+            user.setPassword(password);
+            user.put("first_name", firstName);
+            user.put("last_name", lastName);
+            user.signUpInBackground(new SignUpCallback() {
+                @Override
+                public void done(ParseException e) {
                     progressDialog.dismiss();
-                    if (user == null) {
-                        Log.d("Login", "Login failed with error: " + e.getMessage());
+                    if (e == null) {
+                        Log.d("SIGNUP", "Signed Up!");
+                        finish();
                     } else {
-                        Log.d("Login", "Login succeeded!");
-                        finishLogin();
+                        displayErrorMessage("Unable to create a new account. Try again later!");
+                        Log.d("SIGNUP", "Error signing up...");
                     }
                 }
             });
@@ -75,8 +105,8 @@ public class Login extends FragmentActivity {
     }
 
     private void displayErrorMessage(String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(Login.this).create();
-        alertDialog.setTitle("Login Error");
+        AlertDialog alertDialog = new AlertDialog.Builder(Signup.this).create();
+        alertDialog.setTitle("Signup Error");
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
@@ -86,13 +116,8 @@ public class Login extends FragmentActivity {
         alertDialog.show();
     }
 
-    public void onSignupClick(View view) {
-        Intent signupIntent = new Intent(Login.this, Signup.class);
-        Login.this.startActivity(signupIntent);
-    }
-
     public void onFacebookLoginClick(View view) {
-        progressDialog = ProgressDialog.show(Login.this, "", "Logging In...", true);
+        progressDialog = ProgressDialog.show(Signup.this, "", "Logging In...", true);
 
         List<String> permissions = Arrays.asList("public_profile", "email");
         ParseFacebookUtils.logInWithReadPermissionsInBackground(this, permissions, new LogInCallback() {
@@ -114,7 +139,7 @@ public class Login extends FragmentActivity {
                             } catch (JSONException jsone) {
                                 Log.d("JSON Exception", jsone.getMessage());
                             } finally {
-                                finishLogin();
+                                finishSignup();
                             }
                         }
                     });
@@ -124,7 +149,7 @@ public class Login extends FragmentActivity {
                     request.executeAsync();
                 } else {
                     Log.d("Facebook Login", "Logging in using old Facebook-linked account.");
-                    finishLogin();
+                    finishSignup();
                 }
             }
         });
@@ -136,7 +161,8 @@ public class Login extends FragmentActivity {
         ParseFacebookUtils.onActivityResult(requestCode, resultCode, data);
     }
 
-    private void finishLogin() {
-        finish();
+    private void finishSignup() {
+        Intent mainActivityIntent = new Intent(Signup.this, MainActivity.class);
+        Signup.this.startActivity(mainActivityIntent);
     }
 }

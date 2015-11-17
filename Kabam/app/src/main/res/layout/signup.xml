@@ -7,16 +7,61 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
-        android:id="@+id/editText" />
+        android:id="@+id/firstName"
+        android:hint="First Name" />
 
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:text="Name"
         android:ems="10"
-        android:id="@+id/editText2"
-        android:layout_gravity="center_horizontal" />
+        android:id="@+id/lastName"
+        android:layout_gravity="center_horizontal"
+        android:hint="Last Name" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
+        android:ems="10"
+        android:id="@+id/email"
+        android:layout_gravity="center_horizontal"
+        android:hint="Email" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/password"
+        android:layout_gravity="center_horizontal"
+        android:hint="Password" />
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:ems="10"
+        android:id="@+id/confirmPassword"
+        android:layout_gravity="center_horizontal"
+        android:hint="Confirm Password" />
+
+    <com.facebook.login.widget.LoginButton
+        android:id="@+id/facebook_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:onClick="onFacebookLoginClick" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Account"
+        android:id="@+id/createAccount"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onCreateAccountClick" />
+
 </LinearLayout>

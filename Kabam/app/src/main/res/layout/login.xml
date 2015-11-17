@@ -44,7 +44,8 @@
         android:layout_height="wrap_content"
         android:text="Sign Up"
         android:id="@+id/email_signup"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:onClick="onSignupClick" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
