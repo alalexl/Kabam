@@ -65,9 +65,13 @@ public class Login extends FragmentActivity {
                     progressDialog.dismiss();
                     if (user == null) {
                         Log.d("Login", "Login failed with error: " + e.getMessage());
-                    } else {
+                        displayErrorMessage("There was an error while logging you in: " + e.getMessage() + ". Please try again later.");
+                    } else if (user.getBoolean("emailVerified")) {
                         Log.d("Login", "Login succeeded!");
                         finishLogin();
+                    } else {
+                        Log.d("Login", "Login unsuccessful! Please validate email.");
+                        displayErrorMessage("Please validate email to use Kabam!");
                     }
                 }
             });
@@ -128,6 +132,11 @@ public class Login extends FragmentActivity {
                 }
             }
         });
+    }
+
+    public void onForgotPasswordClick(View view) {
+        Intent resetPasswordIntent = new Intent(Login.this, ResetPassword.class);
+        Login.this.startActivity(resetPasswordIntent);
     }
 
     @Override

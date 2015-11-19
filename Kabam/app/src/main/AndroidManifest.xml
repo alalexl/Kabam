@@ -24,6 +24,10 @@
             android:name=".Signup"
             android:label="Signup">
         </activity>
+        <activity
+            android:name=".ResetPassword"
+            android:label="Reset Password">
+        </activity>
 
         <activity android:name="com.facebook.FacebookActivity"
             android:configChanges=

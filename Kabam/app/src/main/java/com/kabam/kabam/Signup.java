@@ -162,7 +162,6 @@ public class Signup extends FragmentActivity {
     }
 
     private void finishSignup() {
-        Intent mainActivityIntent = new Intent(Signup.this, MainActivity.class);
-        Signup.this.startActivity(mainActivityIntent);
+        finish();
     }
 }
