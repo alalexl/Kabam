@@ -50,8 +50,6 @@ public class Login extends FragmentActivity {
     }
 
     public void onLoginClick(View view) {
-        progressDialog = ProgressDialog.show(Login.this, "", "Logging In...", true);
-
         String email = ((EditText) findViewById(R.id.email)).getText().toString();
         String password = ((EditText) findViewById(R.id.password)).getText().toString();
 
@@ -60,6 +58,8 @@ public class Login extends FragmentActivity {
         else if (password.length() == 0)
             displayErrorMessage("Enter a password!");
         else {
+            progressDialog = ProgressDialog.show(Login.this, "", "Logging In...", true);
+
             ParseUser.logInInBackground(email, password, new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
                     progressDialog.dismiss();

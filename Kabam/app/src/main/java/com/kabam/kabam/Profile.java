@@ -45,8 +45,6 @@ import java.util.List;
  */
 public class Profile extends Fragment {
 
-    private Dialog progressDialog;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile, container, false);
