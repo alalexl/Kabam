@@ -17,22 +17,19 @@
         android:text="My Timeline"
         android:id="@+id/timeline"
         android:layout_gravity="center_horizontal"
-        android:nestedScrollingEnabled="false"
-        android:onClick="onMyTimelineClick" />
+        android:nestedScrollingEnabled="false" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="My Classes"
         android:id="@+id/classes"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onMyClassesClick" />
+        android:layout_gravity="center_horizontal" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log Out"
         android:id="@+id/logOut"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onLogoutClick" />
+        android:layout_gravity="center_horizontal" />
 </LinearLayout>

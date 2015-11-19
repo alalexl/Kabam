@@ -1,8 +1,12 @@
 package com.kabam.kabam;
 
 import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -12,7 +16,7 @@ import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
 
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +36,14 @@ public class MainActivity extends Activity {
             Intent loginIntent = new Intent(MainActivity.this, Login.class);
             MainActivity.this.startActivity(loginIntent);
         }
+
+        // Control Back Button
+        getSupportFragmentManager().addOnBackStackChangedListener(new android.support.v4.app.FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                getActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount() != 0);
+            }
+        });
     }
 
     @Override
@@ -46,13 +58,29 @@ public class MainActivity extends Activity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_profile:
+                if (ParseUser.getCurrentUser() == null) {
+                    Intent loginIntent = new Intent(MainActivity.this, Login.class);
+                    MainActivity.this.startActivity(loginIntent);
+                } else {
+                    FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                    ft.replace(R.id.fragmentContainer, new Profile());
+                    ft.addToBackStack("profile");
+                    ft.commit();
+                }
+                return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.action_search:
+
+                return true;
+
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStack();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        return super.onOptionsItemSelected(item);
     }
 }
