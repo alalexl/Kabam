@@ -46,7 +46,9 @@ public class MainActivity extends FragmentActivity {
             }
         });
 
-
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.fragmentContainer, new Classes());
+        ft.commit();
     }
 
     @Override
@@ -75,9 +77,7 @@ public class MainActivity extends FragmentActivity {
                 return true;
 
             case R.id.action_search:
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragmentContainer, new Classes());
-                ft.commit();
+
                 return true;
 
             case android.R.id.home:
