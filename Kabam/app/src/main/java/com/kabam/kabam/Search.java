@@ -19,14 +19,6 @@ import android.widget.Toast;
 public class Search extends Fragment{
     private MainActivity activity;
 
-    public Search(){
-
-    }
-
-    public Search(MainActivity activity){
-        this.activity = activity;
-    }
-
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search, container, false);
 
@@ -58,7 +50,7 @@ public class Search extends Fragment{
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); 
+                dialog.dismiss();
             }
         });
         alertDialog.show();
