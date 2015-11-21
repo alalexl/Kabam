@@ -58,7 +58,7 @@ public class Search extends Fragment{
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss(); //bull
+                dialog.dismiss(); 
             }
         });
         alertDialog.show();
