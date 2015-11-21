@@ -1,15 +1,31 @@
 package com.kabam.kabam;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 /**
  * Created by Ayush on 11/19/15.
  */
-public class Class {
+@ParseClassName("Class")
+public class Class extends ParseObject {
 
-    public String classTitle;
-    public int enrollCount;
+    public Class() {
 
-    public Class(String classTitle, int enrollCount) {
-        this.classTitle = classTitle;
-        this.enrollCount = enrollCount;
+    }
+
+    public String getClassTitle() {
+        return getString("title");
+    }
+
+    public void setClassTitle(String title) {
+        put("title", title);
+    }
+
+    public String getEnrollCount() {
+        return getNumber("enrolled").intValue() + " Students Enrolled";
+    }
+
+    public void setEnrollCount(int count) {
+        put("enrolled", count);
     }
 }

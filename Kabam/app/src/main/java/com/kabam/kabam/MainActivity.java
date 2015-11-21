@@ -27,6 +27,7 @@ public class MainActivity extends FragmentActivity {
         FacebookSdk.sdkInitialize(getApplicationContext());
 
         // Initialize Parse
+        ParseObject.registerSubclass(Class.class);
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "TnpAVtQJyj1fBngIFSKjRcWuMh3g8VwtWsjXw2sV", "oZZa2IMMaFQOgV20qLA84DkqWWCA8EpUDWZeUHV9");
         ParseFacebookUtils.initialize(getApplicationContext());
@@ -44,6 +45,8 @@ public class MainActivity extends FragmentActivity {
                 getActionBar().setDisplayHomeAsUpEnabled(getSupportFragmentManager().getBackStackEntryCount() != 0);
             }
         });
+
+
     }
 
     @Override
@@ -72,7 +75,9 @@ public class MainActivity extends FragmentActivity {
                 return true;
 
             case R.id.action_search:
-
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragmentContainer, new Classes());
+                ft.commit();
                 return true;
 
             case android.R.id.home:

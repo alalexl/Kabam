@@ -56,6 +56,7 @@ public class Profile extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
+        ((TextView) view.findViewById(R.id.name)).setText(ParseUser.getCurrentUser().get("first_name") + " " + ParseUser.getCurrentUser().get("last_name"));
         return view;
     }
 }
