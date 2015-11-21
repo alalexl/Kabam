@@ -17,7 +17,6 @@ import android.widget.Toast;
  * Created by SmrtAsian on 11/20/15.
  */
 public class Search extends Fragment{
-    private MainActivity activity;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search, container, false);
@@ -28,25 +27,22 @@ public class Search extends Fragment{
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("Message", "Button was pushed");
                 if (!searchField.getText().toString().matches("")){ //if search field is not empty
-                    Log.d("Message", "Search field was notyempty");
+                    Log.d("Message", "Search field was not empty");
                 }
                 else{ //search field cannot be empty
                     Log.d("Message", "Search field was empty");
                     displayErrorMessage("You cannot leave search field field empty!");
 
                 }
-
-                // getActivity().getSupportFragmentManager().popBackStack();
             }
         });
         return view;
     }
 
     private void displayErrorMessage(String message) {
-        AlertDialog alertDialog = new AlertDialog.Builder(this.getActivity()).create();
-        alertDialog.setTitle("Login Error");
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+        alertDialog.setTitle("Search Error");
         alertDialog.setMessage(message);
         alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {

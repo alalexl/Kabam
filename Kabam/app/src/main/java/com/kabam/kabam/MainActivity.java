@@ -78,10 +78,9 @@ public class MainActivity extends FragmentActivity {
 
             case R.id.action_search: //if search is clicked
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragmentContainer, new Search() );
+                ft.replace(R.id.fragmentContainer, new Search());
                 ft.addToBackStack("search");
                 ft.commit();
-
                 return true;
 
             case android.R.id.home:
