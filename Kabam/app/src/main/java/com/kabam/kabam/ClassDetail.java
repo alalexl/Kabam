@@ -1,8 +1,6 @@
 package com.kabam.kabam;
 
-import android.app.Activity;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,20 +8,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
+import com.parse.ParseUser;
 import com.kabam.kabam.Adapters.ConversationQueryAdapter;
 import com.kabam.kabam.Adapters.QueryAdapter;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.layer.sdk.messaging.Conversation;
-
-import java.util.List;
-import java.util.Set;
 
 /**
  * Created by Alex on 11/19/15.
@@ -34,6 +25,56 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
     private EventQueryAdapter classEvents;
     private ConversationQueryAdapter mConversationsAdapter;
     private View view;
+    private Boolean enrolled = false;
+    private ListView classDetailList;
+    private View enrollButton, eventButton, addEventButton, chatButton, addChatButton;
+
+    private void notLoggedIn() {
+        enrollButton.setVisibility(View.GONE);
+        eventButton.setVisibility(View.GONE);
+        addEventButton.setVisibility(View.GONE);
+        chatButton.setVisibility(View.GONE);
+        addChatButton.setVisibility(View.GONE);
+        classDetailList.setVisibility(View.GONE);
+    }
+
+    private void notEnrolled() {
+        enrollButton.setVisibility(View.VISIBLE);
+        eventButton.setVisibility(View.GONE);
+        addEventButton.setVisibility(View.GONE);
+        chatButton.setVisibility(View.GONE);
+        addChatButton.setVisibility(View.GONE);
+        classDetailList.setVisibility(View.GONE);
+    }
+
+    private void enrolled() {
+        enrollButton.setVisibility(View.GONE);
+        classDetailList.setVisibility(View.VISIBLE);
+        eventButton.setVisibility(View.VISIBLE);
+        addEventButton.setVisibility(View.VISIBLE);
+        chatButton.setVisibility(View.VISIBLE);
+        addChatButton.setVisibility(View.VISIBLE);
+    }
+
+    private void refreshButtons() {
+        if (ParseUser.getCurrentUser() != null) {
+            if (enrolled) {
+                enrolled();
+            } else {
+                notEnrolled();
+                enrollButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        enrollButton.setVisibility(View.GONE);
+                        enrolled = true;
+                        refreshButtons();
+                    }
+                });
+            }
+        } else {
+            notLoggedIn();
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -110,10 +151,10 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             @Override
             public void onClick(View view) {
 
-                ListView lView = (ListView)getView().findViewById(R.id.classDetailList);
+                ListView lView = (ListView) getView().findViewById(R.id.classDetailList);
                 lView.setVisibility(View.GONE);
 
-                RecyclerView rView = (RecyclerView)getView().findViewById(R.id.chatView);
+                RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
                 rView.setVisibility(View.VISIBLE);
 
 
@@ -150,14 +191,9 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 
     public void onResume(){
         super.onResume();
+        refreshButtons();
 
-        if (!LayerImpl.isAuthenticated()) {
-
-
-            //Everything is set up, so start populating the Conversation list
-        } else {
-
-            Log.d("Activity", "Starting conversation view");
+        if (LayerImpl.isAuthenticated()) {
             setupConversationView();
         }
     }
