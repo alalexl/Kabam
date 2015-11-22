@@ -9,6 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Space
+            android:layout_height="30dp"
+            android:layout_width="1dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -96,7 +100,8 @@
             android:hint="@string/description"
             android:id="@+id/addEventDescription"
             android:background="@drawable/border_style"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:gravity="top|left" />
 
         <Space
             android:layout_height="20dp"
@@ -108,6 +113,9 @@
             android:id="@+id/addEventSubmitButton"
             android:layout_gravity="center_horizontal"
             android:nestedScrollingEnabled="true" />
+        <Space
+            android:layout_height="30dp"
+            android:layout_width="1dp" />
 
     </LinearLayout>
 </ScrollView>

@@ -16,7 +16,7 @@ import android.widget.Toast;
 /**
  * Created by SmrtAsian on 11/20/15.
  */
-public class Search extends Fragment{
+public class Search extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.search, container, false);
