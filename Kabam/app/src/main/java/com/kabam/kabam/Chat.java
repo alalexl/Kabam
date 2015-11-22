@@ -26,7 +26,6 @@ public class Chat extends FragmentBase implements ConversationQueryAdapter.Conve
     private View view;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         view = super.onCreateView(inflater, container, savedInstanceState);
 
         Button chatButton = (Button) view.findViewById(R.id.newConversation);
@@ -38,7 +37,6 @@ public class Chat extends FragmentBase implements ConversationQueryAdapter.Conve
     }
 
     public void onResume(){
-
         super.onResume();
 
         if (!LayerImpl.isAuthenticated()) {

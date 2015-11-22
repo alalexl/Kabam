@@ -8,7 +8,8 @@ import android.os.Handler;
 /**
  * Created by SmrtAsian on 11/21/15.
  */
-public class Loadingscreen extends Activity{
+public class LoadingScreen extends Activity {
+
     private static int SPLASH_TIME_OUT = 3000;
 
     protected void onCreate(Bundle savedInstanceState){
@@ -27,7 +28,7 @@ public class Loadingscreen extends Activity{
             public void run() {
                 // This method will be executed once the timer is over
                 // Start your app main activity
-                Intent i = new Intent(Loadingscreen.this, MainActivity.class);
+                Intent i = new Intent(LoadingScreen.this, MainActivity.class);
                 startActivity(i);
 
                 // close this activity
@@ -35,5 +36,4 @@ public class Loadingscreen extends Activity{
             }
         }, SPLASH_TIME_OUT);
     }
-
 }

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.kabam.kabam.MainActivity;
+import com.kabam.kabam.ParseUtilities;
 import com.kabam.kabam.R;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Conversation;
@@ -19,6 +20,7 @@ import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
+import com.parse.Parse;
 
 /**
  * Created by SmrtAsian on 11/21/15.
@@ -122,7 +124,7 @@ public class MessageQueryAdapter extends QueryAdapter<Message, MessageQueryAdapt
 
         //Set the content of the message, sender, and received time
         viewHolder.content.setText(LayerImpl.getMessageText(message));
-        viewHolder.sender.setText(MainActivity.allUsers.get(senderId).get("first_name") + " " + MainActivity.allUsers.get(senderId).get("last_name") );
+        viewHolder.sender.setText(ParseUtilities.getName(senderId));
         viewHolder.time.setText(LayerImpl.getReceivedAtTime(message));
         viewHolder.message = message;
 

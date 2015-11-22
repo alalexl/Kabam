@@ -22,6 +22,11 @@ import com.kabam.kabam.Adapters.QueryAdapter;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.MessagePart;
+import com.parse.FindCallback;
+import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -146,7 +151,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
 
                 //Create a new stylized text view
                 TextView tv = new TextView(this.getContext());
-                tv.setText(MainActivity.allUsers.get(id).get("first_name") + " " +  MainActivity.allUsers.get(id).get("last_name") );
+                tv.setText(ParseUtilities.getName(id));
                 tv.setTextSize(16);
                 tv.setPadding(5, 5, 5, 5);
                 tv.setBackgroundColor(Color.LTGRAY);
@@ -266,83 +271,104 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
     }
 
     //Shows a list of all users that can be added to the Conversation
-    private void showParticipantPicker(){
-
-        //Update user list from Parse
-        MainActivity.updateUsers();
-
-        //Create a new Dialog Box
-        AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this.getContext());
-        helpBuilder.setTitle("Select Participants");
-        helpBuilder.setMessage("Add or remove participants from this conversation:\n");
-
-        //The Linear Layout View that will hold all the CheckBox views
-        LinearLayout checkboxList = new LinearLayout(this.getContext());
-        checkboxList.setOrientation(LinearLayout.VERTICAL);
-
-        //Grab a list of all friends
-        Set friends = MainActivity.allUsers.keySet();
-
-        //A Map of the CheckBox with the human readable username and the Parse Object ID
-        final HashMap<CheckBox, String> allUsers = new HashMap<>();
-
-        //Create the list of participants if it hasn't been instantiated
-        if(mTargetParticipants == null)
-            mTargetParticipants = new ArrayList<>();
-
-        //Go through each friend and create a Checkbox with a human readable name mapped to the
-        // Object ID
-        Iterator itr = friends.iterator();
-        while(itr.hasNext()) {
-            String friendId = (String)itr.next();
-
-            CheckBox friend = new CheckBox(this.getContext());
-            friend.setText(MainActivity.getUsername(friendId));
-
-            //If this user is already selected, mark the checkbox
-            if(mTargetParticipants.contains(friendId))
-                friend.setChecked(true);
-
-            checkboxList.addView(friend);
-
-            allUsers.put(friend, friendId);
+    private void showParticipantPicker() {
+        Class selectedClass = null;
+        if (getArguments() != null) {
+            if (getArguments().getString("class") != null) {
+                selectedClass = ParseUtilities.getClass(getArguments().getString("class"));
+            }
         }
 
-        //Add the list of CheckBoxes to the Alert Dialog
-        helpBuilder.setView(checkboxList);
+        //Update user list from Parse
+        final HashMap<String, ParseUser> users = new HashMap<>();
+        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
 
-        //When the user is done adding/removing participants, update the list of target users
-        helpBuilder.setPositiveButton("Done",
-                new DialogInterface.OnClickListener() {
+        ParseQuery<Class> classQuery = ParseQuery.getQuery("Class");
+        classQuery.whereEqualTo("objectId", selectedClass.getObjectId());
 
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Do nothing but close the dialog
+        userQuery.whereMatchesQuery("enrolled", classQuery);
 
-                        //Reset the target user list, and rebuild it based on which checkboxes are selected
-                        mTargetParticipants.clear();
-                        mTargetParticipants.add(LayerImpl.getLayerClient().getAuthenticatedUserId());
+        userQuery.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> results, ParseException e) {
+                if (e == null) {
+                    //Create a new Dialog Box
+                    AlertDialog.Builder helpBuilder = new AlertDialog.Builder(getContext());
+                    helpBuilder.setTitle("Select Participants");
+                    helpBuilder.setMessage("Add or remove participants from this conversation:\n");
 
-                        Set checkboxes = allUsers.keySet();
-                        Iterator checkItr = checkboxes.iterator();
-                        while(checkItr.hasNext()){
-                            CheckBox currCheck = (CheckBox)checkItr.next();
-                            if(currCheck != null && currCheck.isChecked()){
-                                String friendID = allUsers.get(currCheck);
-                                mTargetParticipants.add(friendID);
-                            }
+                    //The Linear Layout View that will hold all the CheckBox views
+                    LinearLayout checkboxList = new LinearLayout(getContext());
+                    checkboxList.setOrientation(LinearLayout.VERTICAL);
+
+                    //Grab a list of all friends
+                    //A Map of the CheckBox with the human readable username and the Parse Object ID
+                    final HashMap<CheckBox, String> allUsers = new HashMap<>();
+
+                    //Create the list of participants if it hasn't been instantiated
+                    if(mTargetParticipants == null)
+                        mTargetParticipants = new ArrayList<>();
+
+                    //Go through each friend and create a Checkbox with a human readable name mapped to the
+                    // Object ID
+                    for (int i = 0; i < results.size(); i++){
+                        if (results.get(i) != ParseUser.getCurrentUser()){
+                            String friendId = results.get(i).getObjectId();
+
+                            CheckBox friend = new CheckBox(getContext());
+                            friend.setText(ParseUtilities.getName(friendId));
+
+                            //If this user is already selected, mark the checkbox
+                            if(mTargetParticipants.contains(friendId))
+                                friend.setChecked(true);
+
+                            checkboxList.addView(friend);
+
+                            allUsers.put(friend, friendId);
                         }
 
-                        Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
-
-                        //Draw the list of target users
-                        populateToField(mTargetParticipants);
                     }
-                });
+
+                    //Add the list of CheckBoxes to the Alert Dialog
+                    helpBuilder.setView(checkboxList);
+
+                    //When the user is done adding/removing participants, update the list of target users
+                    helpBuilder.setPositiveButton("Done",
+                            new DialogInterface.OnClickListener() {
+
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Do nothing but close the dialog
+
+                                    //Reset the target user list, and rebuild it based on which checkboxes are selected
+                                    mTargetParticipants.clear();
+                                    mTargetParticipants.add(LayerImpl.getLayerClient().getAuthenticatedUserId());
+
+                                    Set checkboxes = allUsers.keySet();
+                                    Iterator checkItr = checkboxes.iterator();
+                                    while(checkItr.hasNext()){
+                                        CheckBox currCheck = (CheckBox)checkItr.next();
+                                        if(currCheck != null && currCheck.isChecked()){
+                                            String friendID = allUsers.get(currCheck);
+                                            mTargetParticipants.add(friendID);
+                                        }
+                                    }
+
+                                    Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
+
+                                    //Draw the list of target users
+                                    populateToField(mTargetParticipants);
+                                }
+                            });
 
 
-        // Create and show the dialog box with list of all participants
-        AlertDialog helpDialog = helpBuilder.create();
-        helpDialog.show();
+                    // Create and show the dialog box with list of all participants
+                    AlertDialog helpDialog = helpBuilder.create();
+                    helpDialog.show();
+                }
+            }
+        });
+
+
 
     }
 
