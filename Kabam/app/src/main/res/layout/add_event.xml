@@ -97,7 +97,8 @@
             android:hint="@string/description"
             android:id="@+id/addEventDescription"
             android:background="@drawable/border_style"
-            android:layout_gravity="center_horizontal" />
+            android:layout_gravity="center_horizontal"
+            android:gravity="top|left"/>
 
         <Space
             android:layout_height="20dp"
