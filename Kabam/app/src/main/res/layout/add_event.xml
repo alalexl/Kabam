@@ -91,14 +91,26 @@
         <Space
             android:layout_height="20dp"
             android:layout_width="1dp" />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName"
+            android:hint="Event Location"
+            android:ems="15"
+            android:id="@+id/addEventLocation"
+            android:layout_gravity="center_horizontal"
+            android:editable="true" />
+
         <EditText
             android:layout_width="300dp"
-            android:layout_height="300dp"
+            android:layout_height="248dp"
             android:hint="@string/description"
             android:id="@+id/addEventDescription"
             android:background="@drawable/border_style"
             android:layout_gravity="center_horizontal"
-            android:gravity="top|left"/>
+            android:gravity="top|left"
+            android:layout_marginTop="20dp"/>
 
         <Space
             android:layout_height="20dp"

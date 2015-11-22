@@ -79,7 +79,17 @@ public class ClassDetail extends Fragment {
         view.findViewById(R.id.addChatButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (selectedClass != null) {
+                    String selectedClassObjectID = selectedClass.getObjectId();
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("class", selectedClassObjectID);
+                    Message message = new Message();
+                    message.setArguments(bundle);
+                    ft.replace(R.id.fragmentContainer, message);
+                    ft.addToBackStack("add chat");
+                    ft.commit();
+                }
             }
         });
 

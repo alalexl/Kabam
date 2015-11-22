@@ -71,7 +71,7 @@ public class AddEvent extends Fragment {
                         if (date != null) {
                             String description = ((EditText) getView().findViewById(R.id.addEventDescription)).getText().toString();
                             if (description.length() > 0) {
-                                String location = "FAKE LOCATION";
+                                String location = ((EditText) getView().findViewById(R.id.addEventLocation)).getText().toString();;
                                 if (location.length() > 0) {
                                     final Dialog progressDialog = ProgressDialog.show(getActivity(), "", "Adding Event...", true);
 
