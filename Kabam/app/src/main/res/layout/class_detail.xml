@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="CSCI 201"
+        android:text="Test Class"
         android:id="@+id/className"
         android:layout_gravity="center_horizontal" />
 
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="85 Enrolled"
+        android:text="0 Enrolled"
         android:id="@+id/classEnrolled"
         android:layout_gravity="center_horizontal" />
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:text="Events"
             android:id="@+id/eventButton"
-            android:onClick="onEventClick" />
+            android:layout_weight="1" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -42,8 +42,7 @@
             android:layout_height="wrap_content"
             android:text="+"
             android:id="@+id/addEventButton"
-            android:layout_weight="1"
-            android:onClick="onAddEventClick" />
+            android:layout_weight="1" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -51,8 +50,7 @@
             android:layout_height="wrap_content"
             android:text="Chats"
             android:id="@+id/chatButton"
-            android:layout_weight="1"
-            android:onClick="onChatClick" />
+            android:layout_weight="1" />
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -60,15 +58,27 @@
             android:layout_height="wrap_content"
             android:text="+"
             android:id="@+id/addChatButton"
-            android:layout_weight="1"
-            android:onClick="onAddChatClick" />
+            android:layout_weight="1" />
 
     </LinearLayout>
 
-    <ListView
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/classDetailList"
-        android:layout_gravity="center_horizontal" />
+        android:layout_height="match_parent">
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Enroll in this class!"
+            android:id="@+id/enrollButton"
+            android:layout_gravity="center_horizontal"/>
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/classDetailList"
+            android:layout_gravity="center_horizontal" />
+
+    </FrameLayout>
 
 </LinearLayout>
