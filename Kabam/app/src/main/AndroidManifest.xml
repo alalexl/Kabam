@@ -36,6 +36,24 @@
             android:label="@string/app_name" />
 
         <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/facebook_app_id"/>
+
+        <receiver android:name=".LayerPushReceiver">
+            <intent-filter>
+                <action android:name="com.layer.sdk.PUSH"/>
+                <category android:name="com.kabam.kabam"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- Layer's GCM Receiver and Service -->
+        <receiver android:name="com.layer.sdk.services.GcmBroadcastReceiver"
+            android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter android:priority="950">
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="com.kabam.kabam"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="com.layer.sdk.services.GcmIntentService"/>
     </application>
 
     <uses-permission android:name="android.permission.INTERNET" />

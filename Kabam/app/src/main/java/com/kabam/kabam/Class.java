@@ -2,6 +2,10 @@ package com.kabam.kabam;
 
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
+
+import java.util.Date;
+import java.util.Set;
 
 /**
  * Created by Ayush on 11/19/15.
@@ -17,15 +21,31 @@ public class Class extends ParseObject {
         return getString("title");
     }
 
-    public void setClassTitle(String title) {
-        put("title", title);
-    }
-
     public String getEnrollCount() {
         return getNumber("enrolled").intValue() + " Students Enrolled";
     }
 
-    public void setEnrollCount(int count) {
-        put("enrolled", count);
+    public String getLocation() {
+        return getString("location");
+    }
+
+    public Date getTime() {
+        return getDate("time");
+    }
+
+    public String getDescription() {
+        return getString("description");
+    }
+
+    public Set<Event> getEvents() {
+        return (Set<Event>)get("events");
+    }
+
+    public Set<Post> getPosts() {
+        return (Set<Post>)get("posts");
+    }
+
+    public void enrollStudent(ParseUser student) {
+        put("enrolled", getNumber("enrolled").intValue() + 1);
     }
 }
