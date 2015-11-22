@@ -11,16 +11,46 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.facebook.FacebookSdk;
+import com.layer.sdk.LayerClient;
+import com.parse.FindCallback;
 import com.parse.Parse;
+import com.parse.ParseException;
 import com.parse.ParseFacebookUtils;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
+
 public class MainActivity extends FragmentActivity {
+
+    public static HashMap<String, ParseUser> allUsers;
+
+    public static void updateUsers(){
+        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+        userQuery.findInBackground(new FindCallback<ParseUser>() {
+            public void done(List<ParseUser> results, ParseException e) {
+                if (e == null) {
+                    allUsers = new HashMap<>();
+                    for (int i = 0; i < results.size(); i++) {
+                        allUsers.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
+
+    public static String getUsername(String id){
+        return MainActivity.allUsers.get(id).get("first_name") + " " + MainActivity.allUsers.get(id).get("last_name");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
         setContentView(R.layout.activity_main);
 
         // Initialize FacebookSDK
@@ -34,6 +64,8 @@ public class MainActivity extends FragmentActivity {
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, "TnpAVtQJyj1fBngIFSKjRcWuMh3g8VwtWsjXw2sV", "oZZa2IMMaFQOgV20qLA84DkqWWCA8EpUDWZeUHV9");
         ParseFacebookUtils.initialize(getApplicationContext());
+
+        updateUsers();
 
         // Show Login Page if User isn't logged in
         if (ParseUser.getCurrentUser() == null) {
