@@ -9,12 +9,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.DatePicker;
 import android.widget.EditText;
+//THIS CLASS IS FOR THE DATE POPUP, WHICH KEVIN MADE FOR ADD_EVENT
 
 @SuppressLint("ValidFragment")
 public class DateDialog extends DialogFragment implements DatePickerDialog.OnDateSetListener {
     EditText txtdate;
     public DateDialog(View view){
-        txtdate=(EditText)view;
+        txtdate=(EditText)view.findViewById(R.id.addEventDueDate);
     }
     public Dialog onCreateDialog(Bundle savedInstanceState) {
 
@@ -32,7 +33,7 @@ public class DateDialog extends DialogFragment implements DatePickerDialog.OnDat
 
     public void onDateSet(DatePicker view, int year, int month, int day) {
         //show to the selected date in the text box
-        String date=day+"-"+(month+1)+"-"+year;
+        String date=(month+1)+"/"+day+"/"+year;
         txtdate.setText(date);
     }
 

@@ -80,6 +80,7 @@ public class MainActivity extends FragmentActivity {
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 //ft.replace(R.id.fragmentContainer, new Search());
                 //ft.addToBackStack("search");
+                //TESTED ADD_EVENT CODE HERE, CHANGE BACK TO WHATEVER
                 ft.replace(R.id.fragmentContainer, new AddEvent());
                 ft.addToBackStack("add_event");
                 ft.commit();
