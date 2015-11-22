@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/addEventScrollView"
+    >
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="ClassHere"
+        android:id="@+id/addEventClass"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="x Enrolled"
+        android:id="@+id/addEventNumEnrolled"
+        android:layout_gravity="center_horizontal" />
+
+    <Space
+        android:layout_height="30dp"
+        android:layout_width="1dp" />
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="1dip"
+        android:background="#000000" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="@string/event_name"
+        android:ems="15"
+        android:id="@+id/addEventEventName"
+        android:layout_gravity="center_horizontal"
+        android:editable="true" />
+
+    <Space
+        android:layout_height="20dp"
+        android:layout_width="1dp" />
+    <TextView
+        android:ems="12"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Event Type:"
+        android:id="@+id/textView3"
+        android:layout_gravity="center_horizontal" />
+
+    <RadioGroup
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assignment"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/addEventIsAssignment" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Event"
+            android:layout_marginLeft="30dp"
+            android:id="@+id/addEventIsEvent" />
+    </RadioGroup>
+
+    <Space
+        android:layout_height="20dp"
+        android:layout_width="1dp" />
+    <DatePicker
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/addEventDatePicker"
+        android:layout_gravity="center_horizontal" />
+
+    <!--<EditText-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:inputType="textPersonName"-->
+        <!--android:hint="@string/event_date_due_date"-->
+        <!--android:ems="15"-->
+        <!--android:id="@+id/addEventDueDate"-->
+        <!--android:layout_gravity="center_horizontal"-->
+        <!--android:editable="true" />-->
+
+    <Space
+        android:layout_height="20dp"
+        android:layout_width="1dp" />
+    <EditText
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:hint="@string/description"
+        android:id="@+id/addEventDescription"
+        android:background="@drawable/border_style"
+        android:layout_gravity="center_horizontal" />
+
+
+
+    <Space
+        android:layout_height="20dp"
+        android:layout_width="1dp" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Submit"
+        android:id="@+id/addEventSubmitButton"
+        android:layout_gravity="center_horizontal"
+        android:nestedScrollingEnabled="true" />
+
+</LinearLayout>
+</ScrollView>
