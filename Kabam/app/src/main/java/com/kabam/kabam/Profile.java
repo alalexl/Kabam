@@ -2,6 +2,7 @@ package com.kabam.kabam;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +27,28 @@ public class Profile extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-        ((TextView) view.findViewById(R.id.name)).setText(ParseUser.getCurrentUser().get("first_name") + " " + ParseUser.getCurrentUser().get("last_name"));
+        ((TextView) view.findViewById(R.id.name)).setText(ParseUtilities.getName(ParseUser.getCurrentUser().getObjectId()));
+
+        view.findViewById(R.id.timeline).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragmentContainer, new Timeline());
+                ft.addToBackStack("my timeline");
+                ft.commit();
+            }
+        });
+
+        view.findViewById(R.id.classes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                ft.replace(R.id.fragmentContainer, new MyClasses());
+                ft.addToBackStack("my classes");
+                ft.commit();
+            }
+        });
+
         return view;
     }
 }

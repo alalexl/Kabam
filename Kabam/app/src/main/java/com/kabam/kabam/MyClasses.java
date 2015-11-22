@@ -20,7 +20,7 @@ import com.parse.ParseUser;
 /**
  * Created by Ayush on 11/19/15.
  */
-public class Classes extends ListFragment {
+public class MyClasses extends ListFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -31,18 +31,14 @@ public class Classes extends ListFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        String searchText = null;
-        if (getArguments() != null)
-            searchText = getArguments().getString("search");
-
-        setListAdapter(new ClassQueryAdapter(getActivity(), searchText));
+        setListAdapter(new MyClassesQueryAdapter(getActivity()));
     }
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-        String selectedClassObjectID = ((ClassQueryAdapter)getListAdapter()).getItem(position).getObjectId();
+        String selectedClassObjectID = ((MyClassesQueryAdapter)getListAdapter()).getItem(position).getObjectId();
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         Bundle bundle = new Bundle();
         bundle.putString("class", selectedClassObjectID);
