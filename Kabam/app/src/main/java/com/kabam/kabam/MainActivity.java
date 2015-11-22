@@ -116,7 +116,14 @@ public class MainActivity extends FragmentActivity {
                 //ft.replace(R.id.fragmentContainer, new Search());
                 //ft.addToBackStack("search");
                 //TESTED ADD_EVENT CODE HERE, CHANGE BACK TO WHATEVER
-                ft.replace(R.id.fragmentContainer, new AddEvent());
+
+                ClassDetail c = new ClassDetail();
+                Bundle bundle = new Bundle(2);
+                bundle.putString("title", "EE 209");
+                bundle.putString("enrolled", "18 Enrolled");
+                c.setArguments(bundle);
+                ft.replace(R.id.fragmentContainer, c);
+                //ft.replace(R.id.fragmentContainer, new AddEvent());
                 ft.addToBackStack("add_event");
                 ft.commit();
                 return true;
