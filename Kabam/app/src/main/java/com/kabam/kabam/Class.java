@@ -1,5 +1,9 @@
 package com.kabam.kabam;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.view.View;
+
 import com.parse.ParseClassName;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
@@ -12,6 +16,7 @@ import java.util.Set;
  */
 @ParseClassName("Class")
 public class Class extends ParseObject {
+
 
     public Class() {
 
@@ -48,4 +53,5 @@ public class Class extends ParseObject {
     public void enrollStudent(ParseUser student) {
         put("enrolled", getNumber("enrolled").intValue() + 1);
     }
+
 }
