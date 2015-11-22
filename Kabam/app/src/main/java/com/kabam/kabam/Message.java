@@ -241,6 +241,11 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                 mConversation = LayerImpl.getLayerClient().newConversation(mTargetParticipants);
                 createMessagesAdapter();
 
+                EditText title = (EditText)view.findViewById(R.id.chatTitle);
+                String titleText = getTextAsString(title);
+
+                
+
                 //Once the Conversation object is created, we don't allow changing the Participant List
                 // Note: this is an implementation choice. It is always possible to add/remove participants
                 // after a Conversation has been created
@@ -255,6 +260,10 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
         //Grab the user's input
         EditText input = (EditText)view.findViewById(R.id.textInput);
         String text = getTextAsString(input);
+
+
+
+
 
         //If the input is valid, create a new Message and send it to the Conversation
         if(mConversation != null && text != null && text.length() > 0){

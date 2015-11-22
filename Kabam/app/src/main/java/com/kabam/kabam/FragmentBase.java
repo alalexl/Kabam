@@ -29,22 +29,22 @@ public class FragmentBase extends Fragment implements LayerCallbacks, View.OnCli
 
     public Activity activity = this.getActivity();
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        LayerImpl.initialize(this.getActivity().getApplicationContext());
-        LayerImpl.setContext(this);
-
-        if (LayerImpl.isAuthenticated()){
-            Log.d("Message", "User is already authenicated");
-        } else {
-            //User is logged into Parse, so start the Layer Authentication process
-            LayerImpl.authenticateUser();
-        }
-
-        View view = inflater.inflate(R.layout.chat_screen, container, false);
-
-        return view;
-    }
+//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+//
+//        LayerImpl.initialize(this.getActivity().getApplicationContext());
+//        LayerImpl.setContext(this);
+//
+//        if (LayerImpl.isAuthenticated()){
+//            Log.d("Message", "User is already authenicated");
+//        } else {
+//            //User is logged into Parse, so start the Layer Authentication process
+//            LayerImpl.authenticateUser();
+//        }
+//
+//        View view = inflater.inflate(R.layout.chat_screen, container, false);
+//
+//        return view;
+//    }
 
     public void onResume(){
         super.onResume();
