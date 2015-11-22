@@ -58,6 +58,7 @@ public class ParseUtilities {
 
     public static void updateAllClasses() {
         ParseQuery<Class> classQuery = ParseQuery.getQuery("Class");
+        classQuery.setLimit(1000);
         classQuery.findInBackground(new FindCallback<Class>() {
             @Override
             public void done(List<Class> results, ParseException e) {

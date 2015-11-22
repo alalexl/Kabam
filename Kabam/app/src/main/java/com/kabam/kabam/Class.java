@@ -27,7 +27,8 @@ public class Class extends ParseObject {
     }
 
     public String getEnrollCount() {
-        return getNumber("enrolled").intValue() + " Students Enrolled";
+        int enrolled = (getNumber("enrolled") == null) ? 0 : getNumber("enrolled").intValue();
+        return enrolled + " Students Enrolled";
     }
 
     public String getLocation() {
