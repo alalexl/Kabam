@@ -38,15 +38,6 @@ public class ClassDetail extends Fragment {
 
     }
 
-    public static final ClassDetail newClassDetail(Class c) {
-        ClassDetail cd = new ClassDetail(c);
-        Bundle bundle = new Bundle(2);
-        bundle.putString("title", c.getClassTitle());
-        bundle.putString("enrolled", c.getEnrollCount());
-        cd.setArguments(bundle);
-        return cd;
-    }
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.class_detail, container, false);
