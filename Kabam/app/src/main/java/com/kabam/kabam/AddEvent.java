@@ -1,75 +1,129 @@
 package com.kabam.kabam;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.ScrollView;
+import android.widget.TextView;
+
+import com.parse.SaveCallback;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by tanke_000 on 11/20/2015.
  */
 public class AddEvent extends Fragment {
-    public String eventNameString;//Event name
-    public boolean isAssignment;//true=assignment, false=event
-    public String dueDateString;//Event due date
-    public String descriptionString;//Event Description
 
-    private View view;
-    public ScrollView sv;
-    public DatePicker dp;
-    static final int DIALOG_ID=0;
-
-
+    private Class selectedClass;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+        View view = inflater.inflate(R.layout.add_event, container, false);
 
-        view = inflater.inflate(R.layout.add_event, container, false);
-        //initally radio button assignment is checked
-        RadioButton assignmentRB=(RadioButton)view.findViewById(R.id.addEventIsAssignment);
-        assignmentRB.setChecked(true);
-        //clicked date_due EditText, DatePicker Pops up
-        EditText dueDateText=(EditText)view.findViewById(R.id.addEventDueDate);
-        dueDateText.setKeyListener(null);
+        if (getArguments() != null) {
+            if (getArguments().getString("class") != null) {
+                selectedClass = ParseUtilities.getClass(getArguments().getString("class"));
+                ((TextView)view.findViewById(R.id.addEventClass)).setText(selectedClass.getClassTitle());
+                ((TextView)view.findViewById(R.id.addEventNumEnrolled)).setText(selectedClass.getEnrollCount());
+            }
+        }
+
+        final RadioButton isAssignment = (RadioButton)view.findViewById(R.id.addEventIsAssignment);
+
+        EditText dueDateText = (EditText)view.findViewById(R.id.addEventDueDate);
         dueDateText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
            @Override
             public void onFocusChange(View v, boolean hasfocus){
-                if(hasfocus){
-                    DialogFragment newFragment = new DateDialog(view);
-                    newFragment.show(getActivity().getFragmentManager(), "datePicker");
-                 }
+                if (hasfocus) {
+                    DialogFragment newFragment = new DateDialog(getView());
+                    newFragment.show(getActivity().getFragmentManager(), "date_picker");
+                }
             }
 
         });
 
-        //click button saves data
-        Button submitButton=(Button)view.findViewById(R.id.addEventSubmitButton);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-                EditText eventName=(EditText)view.findViewById(R.id.addEventEventName);
-                eventNameString=eventName.getText().toString();
-                RadioButton assignmentRB=(RadioButton)view.findViewById(R.id.addEventIsAssignment);
-                RadioButton eventRB=(RadioButton)view.findViewById(R.id.addEventIsEvent);
-                if(assignmentRB.isChecked())isAssignment=true;
-                else{isAssignment=false;}
+        view.findViewById(R.id.addEventSubmitButton).setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                if (selectedClass != null) {
+                    String title = ((EditText) getView().findViewById(R.id.addEventEventName)).getText().toString();
+                    if (title.length() > 0) {
+                        boolean assignment = isAssignment.isChecked();
 
-                eventNameString=eventName.getText().toString();
-                EditText dueDate=(EditText)view.findViewById(R.id.addEventDueDate);
-                dueDateString=dueDate.getText().toString();
-                EditText description=(EditText)view.findViewById(R.id.addEventDescription);
-                descriptionString=description.getText().toString();
+                        SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
+                        Date date = null;
+                        try {
+                            date = df.parse(((EditText) getView().findViewById(R.id.addEventDueDate)).getText().toString());
+                        } catch (ParseException e) {
+                            Log.d("Exception Adding Event", e.getMessage());
+                        }
 
-                getActivity().getSupportFragmentManager().popBackStack();
+                        if (date != null) {
+                            String description = ((EditText) getView().findViewById(R.id.addEventDescription)).getText().toString();
+                            if (description.length() > 0) {
+                                String location = "FAKE LOCATION";
+                                if (location.length() > 0) {
+                                    final Dialog progressDialog = ProgressDialog.show(getActivity(), "", "Adding Event...", true);
+
+                                    Event event = new Event();
+                                    event.put("time", date);
+                                    event.put("assignment", assignment);
+                                    event.put("description", description);
+                                    event.put("location", location);
+                                    event.put("title", title);
+                                    event.put("class", selectedClass);
+                                    event.saveInBackground(new SaveCallback() {
+                                        @Override
+                                        public void done(com.parse.ParseException e) {
+                                            progressDialog.dismiss();
+                                            if (e == null) {
+                                                getActivity().getSupportFragmentManager().popBackStack();
+                                            } else {
+                                                displayErrorMessage("There was an error trying to add your event. Please try again later!");
+                                                getActivity().getSupportFragmentManager().popBackStack();
+                                            }
+                                        }
+                                    });
+                                } else {
+                                    displayErrorMessage("Please enter a location for your event!");
+                                }
+                            } else {
+                                displayErrorMessage("Please enter a description for your event!");
+                            }
+                        } else {
+                            displayErrorMessage("Please select a date for your event!");
+                        }
+                    } else {
+                        displayErrorMessage("Please enter a title for your event!");
+                    }
+                } else {
+                    displayErrorMessage("There was an error trying to add your event. Please try again later!");
+                    getActivity().getSupportFragmentManager().popBackStack();
+                }
             }
-
         });
         return view;
+    }
+
+    private void displayErrorMessage(String message) {
+        AlertDialog alertDialog = new AlertDialog.Builder(getActivity()).create();
+        alertDialog.setTitle("Add Event Error");
+        alertDialog.setMessage(message);
+        alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        alertDialog.show();
     }
 }

@@ -26,31 +26,9 @@ import java.util.UUID;
 
 public class MainActivity extends FragmentActivity {
 
-    public static HashMap<String, ParseUser> allUsers;
-
-    public static void updateUsers(){
-        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-        userQuery.findInBackground(new FindCallback<ParseUser>() {
-            public void done(List<ParseUser> results, ParseException e) {
-                if (e == null) {
-                    allUsers = new HashMap<>();
-                    for (int i = 0; i < results.size(); i++) {
-                        allUsers.put(results.get(i).getObjectId(), results.get(i));
-                    }
-                }
-            }
-        });
-    }
-
-    public static String getUsername(String id){
-        return MainActivity.allUsers.get(id).get("first_name") + " " + MainActivity.allUsers.get(id).get("last_name");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
         setContentView(R.layout.activity_main);
 
         // Initialize FacebookSDK
@@ -65,7 +43,8 @@ public class MainActivity extends FragmentActivity {
         Parse.initialize(this, "TnpAVtQJyj1fBngIFSKjRcWuMh3g8VwtWsjXw2sV", "oZZa2IMMaFQOgV20qLA84DkqWWCA8EpUDWZeUHV9");
         ParseFacebookUtils.initialize(getApplicationContext());
 
-        updateUsers();
+        ParseUtilities.updateAllUsers();
+        ParseUtilities.updateAllClasses();
 
         // Show Login Page if User isn't logged in
         if (ParseUser.getCurrentUser() == null) {
@@ -111,21 +90,22 @@ public class MainActivity extends FragmentActivity {
                 }
                 return true;
 
-            case R.id.action_search: //if search is clicked
+            case R.id.action_search:
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                //ft.replace(R.id.fragmentContainer, new Search());
-                //ft.addToBackStack("search");
+                ft.replace(R.id.fragmentContainer, new Search());
+                ft.addToBackStack("search");
+                ft.commit();
                 //TESTED ADD_EVENT CODE HERE, CHANGE BACK TO WHATEVER
 
-                ClassDetail c = new ClassDetail();
-                Bundle bundle = new Bundle(2);
-                bundle.putString("title", "EE 209");
-                bundle.putString("enrolled", "18 Enrolled");
-                c.setArguments(bundle);
-                ft.replace(R.id.fragmentContainer, c);
-                //ft.replace(R.id.fragmentContainer, new AddEvent());
-                ft.addToBackStack("add_event");
-                ft.commit();
+//                ClassDetail c = new ClassDetail();
+//                Bundle bundle = new Bundle(2);
+//                bundle.putString("title", "EE 209");
+//                bundle.putString("enrolled", "18 Enrolled");
+//                c.setArguments(bundle);
+//                ft.replace(R.id.fragmentContainer, c);
+//                //ft.replace(R.id.fragmentContainer, new AddEvent());
+//                ft.addToBackStack("add_event");
+//                ft.commit();
                 return true;
 
             case android.R.id.home:

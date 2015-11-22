@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,12 +28,20 @@ public class Search extends Fragment {
         searchButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (!searchField.getText().toString().matches("")){ //if search field is not empty
+                if (searchField.getText().length() > 0) { //if search field is not empty
                     Log.d("Message", "Search field was not empty");
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("search", searchField.getText().toString());
+                    Classes classes = new Classes();
+                    classes.setArguments(bundle);
+                    ft.replace(R.id.fragmentContainer, classes);
+                    ft.addToBackStack("classes");
+                    ft.commit();
                 }
                 else{ //search field cannot be empty
                     Log.d("Message", "Search field was empty");
-                    displayErrorMessage("You cannot leave search field field empty!");
+                    displayErrorMessage("Please enter something to search for!");
 
                 }
             }

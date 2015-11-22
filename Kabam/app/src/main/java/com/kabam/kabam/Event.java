@@ -18,6 +18,10 @@ public class Event extends ParseObject {
 
     }
 
+    public String getEventTitle() {
+        return getString("title");
+    }
+
     public Date getTime() {
         return getDate("time");
     }

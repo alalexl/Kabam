@@ -9,12 +9,14 @@ import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.kabam.kabam.MainActivity;
+import com.kabam.kabam.ParseUtilities;
 import com.kabam.kabam.R;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
+import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -121,7 +123,7 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
                     participants += ", ";
 
                 //Add the human readable username to the String
-                participants += MainActivity.allUsers.get(users.get(i)).get("first_name") + " " + MainActivity.allUsers.get(users.get(i)).get("last_name");
+                participants += ParseUtilities.getName(users.get(i));
             }
         }
         viewHolder.participants.setText(participants);
@@ -129,7 +131,7 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
         //Grab the last message in the conversation and show it in the format "sender: last message content"
         Message message = conversation.getLastMessage();
         if (message != null) {
-            viewHolder.lastMsgContent.setText(MainActivity.getUsername(message.getSender().getUserId()) + ": " + LayerImpl.getMessageText(message));
+            viewHolder.lastMsgContent.setText(ParseUtilities.getName(message.getSender().getUserId()) + ": " + LayerImpl.getMessageText(message));
         } else {
             viewHolder.lastMsgContent.setText("");
         }

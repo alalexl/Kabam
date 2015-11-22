@@ -22,6 +22,8 @@ import com.kabam.kabam.Adapters.QueryAdapter;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.MessagePart;
+import com.parse.Parse;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -146,7 +148,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
 
                 //Create a new stylized text view
                 TextView tv = new TextView(this.getContext());
-                tv.setText(MainActivity.allUsers.get(id).get("first_name") + " " +  MainActivity.allUsers.get(id).get("last_name") );
+                tv.setText(ParseUtilities.getName(id));
                 tv.setTextSize(16);
                 tv.setPadding(5, 5, 5, 5);
                 tv.setBackgroundColor(Color.LTGRAY);
@@ -269,7 +271,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
     private void showParticipantPicker(){
 
         //Update user list from Parse
-        MainActivity.updateUsers();
+        ParseUtilities.updateAllUsers();
 
         //Create a new Dialog Box
         AlertDialog.Builder helpBuilder = new AlertDialog.Builder(this.getContext());
@@ -281,7 +283,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
         checkboxList.setOrientation(LinearLayout.VERTICAL);
 
         //Grab a list of all friends
-        Set friends = MainActivity.allUsers.keySet();
+        Set friends = ParseUtilities.getUserList();
 
         //A Map of the CheckBox with the human readable username and the Parse Object ID
         final HashMap<CheckBox, String> allUsers = new HashMap<>();
@@ -297,7 +299,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
             String friendId = (String)itr.next();
 
             CheckBox friend = new CheckBox(this.getContext());
-            friend.setText(MainActivity.getUsername(friendId));
+            friend.setText(ParseUtilities.getName(friendId));
 
             //If this user is already selected, mark the checkbox
             if(mTargetParticipants.contains(friendId))

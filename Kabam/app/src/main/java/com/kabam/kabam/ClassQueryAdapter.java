@@ -20,11 +20,14 @@ import java.util.ArrayList;
  */
 public class ClassQueryAdapter extends ParseQueryAdapter<Class> {
 
-    public ClassQueryAdapter(Context context) {
+    public ClassQueryAdapter(Context context, final String searchText) {
         super(context, new ParseQueryAdapter.QueryFactory<Class>() {
             public ParseQuery<Class> create() {
                 ParseQuery query = new ParseQuery("Class");
                 query.orderByDescending("title");
+                if (searchText != null) {
+                    query.whereContains("title", searchText);
+                }
                 return query;
             }
         });
@@ -43,6 +46,4 @@ public class ClassQueryAdapter extends ParseQueryAdapter<Class> {
 
         return v;
     }
-
-
 }
