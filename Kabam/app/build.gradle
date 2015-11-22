@@ -18,8 +18,7 @@ android {
         }
     }
 }
-
-repositories {
+repositories{
     maven { url "https://raw.githubusercontent.com/layerhq/releases-android/master/releases/" }
 }
 
@@ -28,6 +27,7 @@ dependencies {
     compile 'com.parse.bolts:bolts-android:1.+'
     compile 'com.parse:parse-android:1.11.0'
     compile 'com.parse:parsefacebookutils-v4-android:1.10.3@aar'
+    compile 'com.android.support:recyclerview-v7:22.0.0'
     compile 'com.parse:parseui-login-android:0.0.1'
     compile 'com.parse:parseui-widget-android:0.0.1'
 
