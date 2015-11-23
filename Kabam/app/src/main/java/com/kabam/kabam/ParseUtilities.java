@@ -18,6 +18,7 @@ public class ParseUtilities {
 
     private static HashMap<String, ParseUser> allUsers;
     private static HashMap<String, Class> allClasses;
+    private static HashMap<String, Event> allEvents;
     private static HashMap<String, ParseObject> allConversations;
 
     public static void updateAllUsers() {
@@ -54,6 +55,26 @@ public class ParseUtilities {
         });
     }
 
+    public static Event getEvent(String eventId) {
+        return allEvents.get(eventId);
+    }
+
+    public static void updateAllEvents() {
+        ParseQuery<Event> classQuery = ParseQuery.getQuery("Event");
+        classQuery.setLimit(1000);
+        classQuery.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> results, ParseException e) {
+                if (e == null) {
+                    allEvents = new HashMap<>();
+                    for (int i = 0; i < results.size(); i++) {
+                        allEvents.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
+
     // use allConversations.get(<layerID>).get("title");
     public static void updateAllConversations() {
         ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Conversation");
@@ -81,6 +102,10 @@ public class ParseUtilities {
 
     public static Class getClass(String classID) {
         return allClasses.get(classID);
+    }
+
+    public static ParseObject getConversation(String layerID) {
+        return allConversations.get(layerID);
     }
 
     public static void addConversationToParse(String conversationId, String title, String classId) {

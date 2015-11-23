@@ -2,6 +2,7 @@ package com.kabam.kabam;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,7 +15,6 @@ import com.parse.ParseUser;
 /**
  * Created by Ayush on 11/16/15.
  */
-//(KEVIN) ADDED ACTIONLISTENER TO TIMELINE BUTTON TO OPEN ADD_EVENT PAGE
 public class Profile extends Fragment {
 
     @Override
@@ -26,7 +26,7 @@ public class Profile extends Fragment {
             public void onClick(View v) {
                 ParseUser.logOut();
                 Log.d("Log Out", "Logging out.");
-                getActivity().getSupportFragmentManager().popBackStack();
+                getActivity().getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
         ((TextView) view.findViewById(R.id.name)).setText(ParseUtilities.getName(ParseUser.getCurrentUser().getObjectId()));

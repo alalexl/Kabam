@@ -50,6 +50,8 @@ public class MainActivity extends FragmentActivity {
 
         ParseUtilities.updateAllUsers();
         ParseUtilities.updateAllClasses();
+        ParseUtilities.updateAllConversations();
+        ParseUtilities.updateAllEvents();
 
         // Show Login Page if User isn't logged in
         if (ParseUser.getCurrentUser() == null) {
@@ -100,18 +102,6 @@ public class MainActivity extends FragmentActivity {
                 ft.replace(R.id.fragmentContainer, new Search());
                 ft.addToBackStack("search");
                 ft.commit();
-
-                //TESTED ADD_EVENT CODE HERE, CHANGE BACK TO WHATEVER
-
-//                ClassDetail c = new ClassDetail();
-//                Bundle bundle = new Bundle(2);
-//                bundle.putString("title", "EE 209");
-//                bundle.putString("enrolled", "18 Enrolled");
-//                c.setArguments(bundle);
-//                ft.replace(R.id.fragmentContainer, c);
-//                //ft.replace(R.id.fragmentContainer, new AddEvent());
-//                ft.addToBackStack("add_event");
-//                ft.commit();
                 return true;
 
             case android.R.id.home:

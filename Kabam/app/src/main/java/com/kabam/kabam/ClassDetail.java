@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -95,6 +96,7 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 
         LayerImpl.initialize(this.getActivity().getApplicationContext());
         LayerImpl.setContext(this);
+        ParseUtilities.updateAllEvents();
 
         if (LayerImpl.isAuthenticated()){
             Log.d("Message", "User is already authenicated");
@@ -117,28 +119,45 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             getActivity().getSupportFragmentManager().popBackStack();
         }
 
-        ParseRelation<Class> classes = ParseUser.getCurrentUser().getRelation("enrolled");
-        ParseQuery<Class> query = classes.getQuery();
-        query.whereEqualTo("objectId", selectedClass.getObjectId());
-        query.findInBackground(new FindCallback<Class>() {
-            @Override
-            public void done(List<Class> objects, ParseException e) {
-                if (e == null) {
-                    if (objects.size() > 0)
-                        enrolled = true;
+        if (ParseUser.getCurrentUser() != null) {
+            ParseRelation<Class> classes = ParseUser.getCurrentUser().getRelation("enrolled");
+            ParseQuery<Class> query = classes.getQuery();
+            query.whereEqualTo("objectId", selectedClass.getObjectId());
+            query.findInBackground(new FindCallback<Class>() {
+                @Override
+                public void done(List<Class> objects, ParseException e) {
+                    if (e == null) {
+                        if (objects.size() > 0)
+                            enrolled = true;
+                    }
+                    refreshButtons();
                 }
-                refreshButtons();
-            }
-        });
+            });
+        }
 
         if (selectedClass != null) {
             RecyclerView rView = (RecyclerView)view.findViewById(R.id.chatView);
             rView.setVisibility(View.GONE);
 
-            ListView lView = (ListView)view.findViewById(R.id.classDetailList);
+            final ListView lView = (ListView)view.findViewById(R.id.classDetailList);
             lView.setVisibility(View.VISIBLE);
+            lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    String eventObjectId = ((EventQueryAdapter) lView.getAdapter()).getItem(position).getObjectId();
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("event", eventObjectId);
+                    bundle.putString("class", selectedClass.getObjectId());
+                    EventDetails eventDetails = new EventDetails();
+                    eventDetails.setArguments(bundle);
+                    ft.replace(R.id.fragmentContainer, eventDetails);
+                    ft.addToBackStack("event detail");
+                    ft.commit();
+                }
+            });
 
-            ((TextView)view.findViewById(R.id.className)).setText(selectedClass.getClassTitle());
+            ((TextView) view.findViewById(R.id.className)).setText(selectedClass.getClassTitle());
             ((TextView)view.findViewById(R.id.classEnrolled)).setText(selectedClass.getEnrollCount());
             classEvents = new EventQueryAdapter(getActivity(), selectedClass);
             classDetailList.setAdapter(classEvents);
@@ -204,8 +223,6 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             }
         });
 
-
-
         return view;
     }
 
@@ -235,38 +252,51 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 
         //The Query Adapter drives the recycler view, and calls back to this activity when the user
         // taps on a Conversation
-        ParseQuery<ParseObject> conversationsForClass = new ParseQuery<>("Conversation");
-        conversationsForClass.whereEqualTo("class", selectedClass);
-        final List<String> conversationIds = new LinkedList<>();
+//        ParseQuery<ParseObject> conversationsForClass = new ParseQuery<>("Conversation");
+//        conversationsForClass.whereEqualTo("class", selectedClass);
+//        final List<String> conversationIds = new LinkedList<>();
+//
+//        conversationsForClass.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if (e == null) {
+//                    for (int i = 0; i < objects.size(); i++) {
+//                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
+//                    }
+//
+//                    if (conversationIds.size() == 0) {
+//                        RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
+//                        rView.setVisibility(View.GONE);
+//                    } else {
+//                        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
+//                            @Override
+//                            public void onItemInserted() {
+//                                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+//                            }
+//                        }, conversationIds);
+//
+//                        //Attach the Query Adapter to the Recycler View
+//                        conversationsView.setAdapter(mConversationsAdapter);
+//
+//                        //Execute the Query
+//                        mConversationsAdapter.refresh();
+//                    }
+//                }
+//            }
+//        });
 
-        conversationsForClass.findInBackground(new FindCallback<ParseObject>() {
+        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
-                    }
-
-                    if (conversationIds.size() == 0) {
-                        RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
-                        rView.setVisibility(View.GONE);
-                    } else {
-                        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
-                            @Override
-                            public void onItemInserted() {
-                                Log.d("Activity", "Conversation Adapter, new conversation inserted");
-                            }
-                        }, conversationIds);
-
-                        //Attach the Query Adapter to the Recycler View
-                        conversationsView.setAdapter(mConversationsAdapter);
-
-                        //Execute the Query
-                        mConversationsAdapter.refresh();
-                    }
-                }
+            public void onItemInserted() {
+                Log.d("Activity", "Conversation Adapter, new conversation inserted");
             }
         });
+
+        //Attach the Query Adapter to the Recycler View
+        conversationsView.setAdapter(mConversationsAdapter);
+
+        //Execute the Query
+        mConversationsAdapter.refresh();
     }
 
 
@@ -311,5 +341,4 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 //        Intent intent = new Intent(ConversationsActivity.this, LoginActivity.class);
 //        startActivity(intent);
     }
-
 }

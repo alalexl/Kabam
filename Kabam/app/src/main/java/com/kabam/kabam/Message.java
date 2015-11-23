@@ -76,8 +76,14 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
 
         //If this is a new conversation, we will want to allow the user to add his/her friends
         mAddUserButton = (Button)view.findViewById(R.id.addParticipants);
-        if(mAddUserButton != null)
+        if(mAddUserButton != null){
+
+            TextView textView = (TextView)view.findViewById(R.id.chatName);
+            textView.setVisibility(View.GONE);
+
             mAddUserButton.setOnClickListener(this);
+        }
+
 
         //A view containing a list of all the Participants in the Conversation (not including the
         // locally authenticated user)
@@ -190,6 +196,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                 //When a new item is inserted into the RecyclerView, scroll to the bottom so the
                 // most recent Message is always displayed
                 mMessagesView.smoothScrollToPosition(Integer.MAX_VALUE);
+
             }
         });
         mMessagesView.setAdapter(mMessagesAdapter);
@@ -260,9 +267,6 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
         //Grab the user's input
         EditText input = (EditText)view.findViewById(R.id.textInput);
         String text = getTextAsString(input);
-
-
-
 
 
         //If the input is valid, create a new Message and send it to the Conversation
@@ -384,6 +388,18 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
     //When a Conversation has Messages, we disable the ability to Add/Remove participants
     private void hideAddParticipantsButton(){
         if(mAddUserButton != null) {
+
+            TextView textView = (TextView)view.findViewById(R.id.chatName);
+            if (ParseUtilities.getConversation(mConversation.getId().toString()) != null){
+                String chatName = ParseUtilities.getConversation(mConversation.getId().toString()).getString("title");
+                textView.setText(chatName);
+                textView.setVisibility(View.VISIBLE);
+            }
+
+            EditText editText = (EditText) view.findViewById(R.id.chatTitle);
+            editText.setVisibility(View.GONE);
+
+
             mAddUserButton.setVisibility(View.GONE);
         }
     }

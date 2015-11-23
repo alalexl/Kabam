@@ -19,7 +19,7 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Event/Homework Name"
-        android:id="@+id/textView3"
+        android:id="@+id/homeworkName"
         android:layout_marginTop="16dp" />
 
     <!--<TextView-->
@@ -39,7 +39,7 @@
         android:gravity="center"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Class Name"
-        android:id="@+id/textView2"
+        android:id="@+id/className"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="16dp"/>
 
@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Time: Event time here"
-        android:id="@+id/textView5"
+        android:id="@+id/eventDetailsTime"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="10dp" />
 
@@ -71,7 +71,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Description: Event description here"
-        android:id="@+id/textView6"
+        android:id="@+id/eventDetailsDescription"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="20dp" />
 
