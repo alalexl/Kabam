@@ -15,6 +15,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.kabam.kabam.Adapters.ConversationQueryAdapter;
 import com.kabam.kabam.Adapters.QueryAdapter;
@@ -76,7 +77,8 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
                 enrollButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        enrollButton.setVisibility(View.GONE);
+                        ParseUtilities.enrollStudentInClass(selectedClass);
+                        ((TextView)getView().findViewById(R.id.classEnrolled)).setText(selectedClass.getEnrollCount());
                         enrolled = true;
                         refreshButtons();
                     }
@@ -115,7 +117,19 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             getActivity().getSupportFragmentManager().popBackStack();
         }
 
-        refreshButtons();
+        ParseRelation<Class> classes = ParseUser.getCurrentUser().getRelation("enrolled");
+        ParseQuery<Class> query = classes.getQuery();
+        query.whereEqualTo("objectId", selectedClass.getObjectId());
+        query.findInBackground(new FindCallback<Class>() {
+            @Override
+            public void done(List<Class> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0)
+                        enrolled = true;
+                }
+                refreshButtons();
+            }
+        });
 
         if (selectedClass != null) {
             RecyclerView rView = (RecyclerView)view.findViewById(R.id.chatView);
@@ -256,24 +270,24 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
     }
 
 
-                //Callback from the Query Adapter. When the user taps a Conversation, grab its ID and start
-                // a MessageActivity to display all the messages
+    //Callback from the Query Adapter. When the user taps a Conversation, grab its ID and start
+    // a MessageActivity to display all the messages
 
-            public void onConversationClick(Conversation conversation) {
-                Log.d("Activity", "Conversation clicked: " + conversation.getId());
+    public void onConversationClick(Conversation conversation) {
+        Log.d("Activity", "Conversation clicked: " + conversation.getId());
 
-                //If the Conversation is valid, start the MessageActivity and pass in the Conversation ID
-                if (conversation != null && conversation.getId() != null && !conversation.isDeleted()) {
+        //If the Conversation is valid, start the MessageActivity and pass in the Conversation ID
+        if (conversation != null && conversation.getId() != null && !conversation.isDeleted()) {
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString("conversation-id", conversation.getId().toString());
+            Bundle bundle = new Bundle();
+            bundle.putString("conversation-id", conversation.getId().toString());
 
-                    FragmentTransaction ft = this.getActivity().getSupportFragmentManager().beginTransaction();
-                    Message temp = new Message();
-                    temp.setArguments(bundle);
-                    ft.replace(R.id.fragmentContainer, temp);
-                    ft.addToBackStack("message_screen");
-                    ft.commit();
+            FragmentTransaction ft = this.getActivity().getSupportFragmentManager().beginTransaction();
+            Message temp = new Message();
+            temp.setArguments(bundle);
+            ft.replace(R.id.fragmentContainer, temp);
+            ft.addToBackStack("message_screen");
+            ft.commit();
 
             /*
             Intent intent = new Intent(ConversationsActivity.this, MessageActivity.class);
@@ -282,20 +296,20 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             */
 
 
-                }
-            }
+        }
+    }
 
-            //You can handle long clicks as well (such as displaying metadata or deleting a conversation)
-            public boolean onConversationLongClick(Conversation conversation) {
-                return false;
-            }
+    //You can handle long clicks as well (such as displaying metadata or deleting a conversation)
+    public boolean onConversationLongClick(Conversation conversation) {
+        return false;
+    }
 
-            //Once the user is fully deauthetnicated (all Messaging activity is synced and deleted), we
-            // allow another user to login
-            public void onUserDeauthenticated() {
-                this.getActivity().getSupportFragmentManager().popBackStack();
+    //Once the user is fully deauthetnicated (all Messaging activity is synced and deleted), we
+    // allow another user to login
+    public void onUserDeauthenticated() {
+        this.getActivity().getSupportFragmentManager().popBackStack();
 //        Intent intent = new Intent(ConversationsActivity.this, LoginActivity.class);
 //        startActivity(intent);
-            }
+    }
 
-        }
+}

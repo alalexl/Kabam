@@ -34,26 +34,6 @@ public class ParseUtilities {
         });
     }
 
-//    public static HashMap<String, ParseUser> getAllUsersInClass(Class selectedClass) {
-//        final HashMap<String, ParseUser> users = new HashMap<>();
-//        ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
-//
-//        ParseQuery<Class> classQuery = ParseQuery.getQuery("Class");
-//        classQuery.whereEqualTo("objectId", selectedClass.getObjectId());
-//
-//        userQuery.whereMatchesQuery("enrolled", classQuery);
-//        List<ParseUser> results = userQuery.find();
-//
-//        userQuery.findInBackground(new FindCallback<ParseUser>() {
-//            @Override
-//            public void done(List<ParseUser> results, ParseException e) {
-//                for (int i = 0; i < results.size(); i++) {
-//                    users.put(results.get(i).getObjectId(), results.get(i));
-//                }
-//            }
-//        });
-//    }
-
     public static Set getUserList() {
         return allUsers.keySet();
     }
@@ -109,5 +89,13 @@ public class ParseUtilities {
         conversation.put("title", title);
         conversation.put("class", getClass(classId));
         conversation.saveInBackground();
+    }
+
+    public static void enrollStudentInClass(Class currentClass) {
+        ParseRelation<Class> enrolled = ParseUser.getCurrentUser().getRelation("enrolled");
+        enrolled.add(currentClass);
+        currentClass.put("enrolled", (currentClass.getNumber("enrolled") == null) ? 1 : currentClass.getNumber("enrolled").intValue() + 1);
+        ParseUser.getCurrentUser().saveInBackground();
+        currentClass.saveInBackground();
     }
 }
