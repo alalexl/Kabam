@@ -28,14 +28,8 @@ public class Profile extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStack();
             }
         });
-        view.findViewById(R.id.timeline).setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragmentContainer, new AddEvent());
-                ft.addToBackStack("add_event");
-                ft.commit();
-            }
-        });
+
+        
         ((TextView) view.findViewById(R.id.name)).setText(ParseUser.getCurrentUser().get("first_name") + " " + ParseUser.getCurrentUser().get("last_name"));
         return view;
     }
