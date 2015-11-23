@@ -23,58 +23,6 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 
     private Class selectedClass;
     private EventQueryAdapter classEvents;
-    private ConversationQueryAdapter mConversationsAdapter;
-    private View view;
-    private Boolean enrolled = false;
-    private ListView classDetailList;
-    private View enrollButton, eventButton, addEventButton, chatButton, addChatButton;
-
-    private void notLoggedIn() {
-        enrollButton.setVisibility(View.GONE);
-        eventButton.setVisibility(View.GONE);
-        addEventButton.setVisibility(View.GONE);
-        chatButton.setVisibility(View.GONE);
-        addChatButton.setVisibility(View.GONE);
-        classDetailList.setVisibility(View.GONE);
-    }
-
-    private void notEnrolled() {
-        enrollButton.setVisibility(View.VISIBLE);
-        eventButton.setVisibility(View.GONE);
-        addEventButton.setVisibility(View.GONE);
-        chatButton.setVisibility(View.GONE);
-        addChatButton.setVisibility(View.GONE);
-        classDetailList.setVisibility(View.GONE);
-    }
-
-    private void enrolled() {
-        enrollButton.setVisibility(View.GONE);
-        classDetailList.setVisibility(View.VISIBLE);
-        eventButton.setVisibility(View.VISIBLE);
-        addEventButton.setVisibility(View.VISIBLE);
-        chatButton.setVisibility(View.VISIBLE);
-        addChatButton.setVisibility(View.VISIBLE);
-    }
-
-    private void refreshButtons() {
-        if (ParseUser.getCurrentUser() != null) {
-            if (enrolled) {
-                enrolled();
-            } else {
-                notEnrolled();
-                enrollButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        enrollButton.setVisibility(View.GONE);
-                        enrolled = true;
-                        refreshButtons();
-                    }
-                });
-            }
-        } else {
-            notLoggedIn();
-        }
-    }
 
     private ConversationQueryAdapter mConversationsAdapter;
     private View view;

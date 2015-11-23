@@ -2,6 +2,7 @@ package com.kabam.kabam;
 
 import com.parse.FindCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
@@ -82,5 +83,13 @@ public class ParseUtilities {
 
     public static Class getClass(String classID) {
         return allClasses.get(classID);
+    }
+
+    public static void addConversationToParse(String conversationId, String title, String classId) {
+        ParseObject conversation = new ParseObject("Conversation");
+        conversation.put("conversationId", conversationId);
+        conversation.put("title", title);
+        conversation.put("class", getClass(classId));
+        conversation.saveInBackground();
     }
 }
