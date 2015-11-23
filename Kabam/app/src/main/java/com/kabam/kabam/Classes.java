@@ -35,6 +35,9 @@ public class Classes extends ListFragment {
         if (getArguments() != null)
             searchText = getArguments().getString("search");
 
+        ParseUtilities.updateAllUsers();
+        ParseUtilities.updateAllClasses();
+
         setListAdapter(new ClassQueryAdapter(getActivity(), searchText));
     }
 
