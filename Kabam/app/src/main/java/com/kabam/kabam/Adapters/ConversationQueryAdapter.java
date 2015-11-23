@@ -106,8 +106,8 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
             return;
         }
 
-        Log.d("Activity", "binding conversation: " + conversation.getId() + " with participants: " + conversation.getParticipants().toString());
-
+        //Log.d("WTF", "binding conversation: " + conversation.getId() + " with participants: " + conversation.getParticipants().toString());
+        Log.d("Ben10", "Conversation ID: " + conversation.getId().toString());
         //Set the Conversation (so when this item is clicked, we can start a MessageActivity and
         // show all the messages associated with it)
         viewHolder.conversation = conversation;
