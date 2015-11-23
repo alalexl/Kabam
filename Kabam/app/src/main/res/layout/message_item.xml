@@ -19,8 +19,7 @@
         android:layout_gravity="right">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TVTheme.Small"
             android:text="My message here. My message here. My message here. My message here. My message here. My message here."
             android:id="@+id/msgContent"
             android:textSize="15dp"
@@ -30,8 +29,7 @@
             android:nestedScrollingEnabled="true" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TVTheme.Small"
             android:text="John Doe"
             android:id="@+id/senderID"
             android:textAlignment="gravity"
@@ -39,8 +37,7 @@
             android:layout_gravity="right" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TVTheme.Small"
             android:text="4:30pm"
             android:id="@+id/sendTime"
             android:textStyle="italic"
