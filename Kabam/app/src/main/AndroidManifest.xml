@@ -23,9 +23,8 @@
 
         <activity android:name=".LoadingScreen"
             android:label="@string/app_name"
-            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -34,25 +33,27 @@
 
         <activity
             android:name=".MainActivity"
-            android:label="@string/app_name" >
-
+            android:label="@string/app_name"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Login"
-            android:label="Login">
+            android:label="Login"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".Signup"
-            android:label="Signup">
+            android:label="Signup"
+            android:screenOrientation="portrait">
         </activity>
         <activity
             android:name=".ResetPassword"
-            android:label="Reset Password">
+            android:label="Reset Password"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity android:name="com.facebook.FacebookActivity"
-            android:configChanges=
-                "keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
             android:label="@string/app_name" />
 
