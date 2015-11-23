@@ -244,7 +244,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                 EditText title = (EditText)view.findViewById(R.id.chatTitle);
                 String titleText = getTextAsString(title);
 
-
+                ParseUtilities.addConversationToParse(mConversation.getId().toString(), titleText, getArguments().getString("class"));
 
                 //Once the Conversation object is created, we don't allow changing the Participant List
                 // Note: this is an implementation choice. It is always possible to add/remove participants

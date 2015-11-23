@@ -14,12 +14,15 @@ import com.kabam.kabam.R;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
+import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
 import com.parse.Parse;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by SmrtAsian on 11/21/15.
@@ -73,9 +76,11 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
 
     //Constructor for the ConversationQueryAdapter
     //Sorts all conversations by last message received (ie, downloaded to the device)
-    public ConversationQueryAdapter(Context context, LayerClient client, ConversationClickHandler conversationClickHandler, Callback callback) {
+    public ConversationQueryAdapter(Context context, LayerClient client, ConversationClickHandler conversationClickHandler, Callback callback, Set<String> conversationIds) {
+        // existing items predicate
         super(client, Query.builder(Conversation.class)
                 .sortDescriptor(new SortDescriptor(Conversation.Property.LAST_MESSAGE_RECEIVED_AT, SortDescriptor.Order.DESCENDING))
+                .predicate(new Predicate(Message.Property.ID, Predicate.Operator.IN, conversationIds))
                 .build(), callback);
 
         //Sets the LayoutInflator and Click callback handler

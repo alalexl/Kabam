@@ -123,19 +123,14 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
         view.findViewById(R.id.eventButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 RecyclerView rView = (RecyclerView)getView().findViewById(R.id.chatView);
                 rView.setVisibility(View.GONE);
-
-
 
                 if (classEvents != null) {
                     ListView lView = (ListView)getView().findViewById(R.id.classDetailList);
                     lView.setVisibility(View.VISIBLE);
 
                     ((ListView)getView().findViewById(R.id.classDetailList)).setAdapter(classEvents);
-
-
                 }
             }
         });
@@ -160,20 +155,11 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
         chatButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 ListView lView = (ListView) getView().findViewById(R.id.classDetailList);
                 lView.setVisibility(View.GONE);
 
                 RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
                 rView.setVisibility(View.VISIBLE);
-
-
-                /*
-                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-                Chat chat = new Chat();
-                ft.replace(R.id.fragmentContainer, chat);
-                ft.addToBackStack("chat screen");
-                ft.commit();*/
             }
         });
 

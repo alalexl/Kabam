@@ -15,7 +15,15 @@ import com.kabam.kabam.Adapters.ConversationQueryAdapter;
 import com.kabam.kabam.Adapters.QueryAdapter;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.layer.sdk.messaging.Conversation;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by SmrtAsian on 11/21/15.
@@ -61,24 +69,39 @@ public class Chat extends FragmentBase implements ConversationQueryAdapter.Conve
         Log.d("Activity", "Setting conversation view");
 
         //Grab the Recycler View and list all conversation objects in a vertical list
-        RecyclerView conversationsView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        final RecyclerView conversationsView = (RecyclerView) view.findViewById(R.id.recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         conversationsView.setLayoutManager(layoutManager);
 
         //The Query Adapter drives the recycler view, and calls back to this activity when the user
         // taps on a Conversation
-        mConversationsAdapter = new ConversationQueryAdapter(this.getActivity().getApplicationContext(), LayerImpl.getLayerClient(), this, new QueryAdapter.Callback() {
+        ParseQuery conversationsForClass = new ParseQuery("Conversation");
+        conversationsForClass.whereEqualTo("class", ParseUtilities.getClass("class"));
+        final Set<String> conversationIds = new HashSet<>();
+
+        conversationsForClass.findInBackground(new FindCallback() {
             @Override
-            public void onItemInserted() {
-                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+            public void done(List objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
+                    }
+
+                    mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), Chat.this, new QueryAdapter.Callback() {
+                        @Override
+                        public void onItemInserted() {
+                            Log.d("Activity", "Conversation Adapter, new conversation inserted");
+                        }
+                    }, conversationIds);
+
+                    //Attach the Query Adapter to the Recycler View
+                    conversationsView.setAdapter(mConversationsAdapter);
+
+                    //Execute the Query
+                    mConversationsAdapter.refresh();
+                }
             }
         });
-
-        //Attach the Query Adapter to the Recycler View
-        conversationsView.setAdapter(mConversationsAdapter);
-
-        //Execute the Query
-        mConversationsAdapter.refresh();
     }
 
     //Callback from the Query Adapter. When the user taps a Conversation, grab its ID and start
@@ -91,6 +114,7 @@ public class Chat extends FragmentBase implements ConversationQueryAdapter.Conve
 
             Bundle bundle=new Bundle();
             bundle.putString("conversation-id", conversation.getId().toString());
+            bundle.putString("class", getArguments().getString("class"));
 
             FragmentTransaction ft = this.getActivity().getSupportFragmentManager().beginTransaction();
             Message temp = new Message();
@@ -98,14 +122,6 @@ public class Chat extends FragmentBase implements ConversationQueryAdapter.Conve
             ft.replace(R.id.fragmentContainer, temp);
             ft.addToBackStack("message_screen");
             ft.commit();
-
-            /*
-            Intent intent = new Intent(ConversationsActivity.this, MessageActivity.class);
-            intent.putExtra("conversation-id", conversation.getId());
-            startActivity(intent);
-            */
-
-
         }
     }
 
