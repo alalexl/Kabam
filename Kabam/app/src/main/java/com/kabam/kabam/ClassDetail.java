@@ -119,19 +119,21 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             getActivity().getSupportFragmentManager().popBackStack();
         }
 
-        ParseRelation<Class> classes = ParseUser.getCurrentUser().getRelation("enrolled");
-        ParseQuery<Class> query = classes.getQuery();
-        query.whereEqualTo("objectId", selectedClass.getObjectId());
-        query.findInBackground(new FindCallback<Class>() {
-            @Override
-            public void done(List<Class> objects, ParseException e) {
-                if (e == null) {
-                    if (objects.size() > 0)
-                        enrolled = true;
+        if (ParseUser.getCurrentUser() != null) {
+            ParseRelation<Class> classes = ParseUser.getCurrentUser().getRelation("enrolled");
+            ParseQuery<Class> query = classes.getQuery();
+            query.whereEqualTo("objectId", selectedClass.getObjectId());
+            query.findInBackground(new FindCallback<Class>() {
+                @Override
+                public void done(List<Class> objects, ParseException e) {
+                    if (e == null) {
+                        if (objects.size() > 0)
+                            enrolled = true;
+                    }
+                    refreshButtons();
                 }
-                refreshButtons();
-            }
-        });
+            });
+        }
 
         if (selectedClass != null) {
             RecyclerView rView = (RecyclerView)view.findViewById(R.id.chatView);
