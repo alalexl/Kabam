@@ -9,6 +9,7 @@ import com.parse.ParseQuery;
 import com.parse.ParseQueryAdapter;
 
 import java.text.DateFormat;
+import java.util.TimeZone;
 
 /**
  * Created by Ayush on 11/22/15.
@@ -37,7 +38,8 @@ public class EventQueryAdapter extends ParseQueryAdapter<Event> {
 
         ((TextView) v.findViewById(R.id.title)).setText(object.getEventTitle());
 
-        DateFormat df = DateFormat.getDateInstance(DateFormat.LONG);
+        DateFormat df = DateFormat.getDateTimeInstance(DateFormat.LONG, DateFormat.SHORT);
+        df.setTimeZone(TimeZone.getTimeZone("UTC"));
         ((TextView) v.findViewById(R.id.enrolled)).setText(df.format(object.getTime()));
 
         return v;

@@ -21,6 +21,7 @@ import com.parse.SaveCallback;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -60,10 +61,6 @@ public class AddEvent extends Fragment {
 
         view.findViewById(R.id.addEventSubmitButton).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //HERE IS THE TIME, GET A NOTIFICATION(debug)
-                TimePicker timePicker=(TimePicker) getView().findViewById(R.id.addEventTimePicker);
-                t=new Time(timePicker.getCurrentHour(),timePicker.getCurrentMinute(),0);
-
                 if (selectedClass != null) {
                     //ADDED TIME HERE
 
@@ -71,10 +68,15 @@ public class AddEvent extends Fragment {
                     if (title.length() > 0) {
                         boolean assignment = isAssignment.isChecked();
 
+                        TimePicker timePicker = (TimePicker)getView().findViewById(R.id.addEventTimePicker);
                         SimpleDateFormat df = new SimpleDateFormat("MM/dd/yyyy");
                         Date date = null;
+                        Calendar calendar = Calendar.getInstance();
                         try {
                             date = df.parse(((EditText) getView().findViewById(R.id.addEventDueDate)).getText().toString());
+                            calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
+                            calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
+                            date.setTime(calendar.getTimeInMillis());
                         } catch (ParseException e) {
                             Log.d("Exception Adding Event", e.getMessage());
                         }
@@ -83,7 +85,7 @@ public class AddEvent extends Fragment {
                             String description = ((EditText) getView().findViewById(R.id.addEventDescription)).getText().toString();
                             if (description.length() > 0) {
                                 String location = ((EditText) getView().findViewById(R.id.addEventLocation)).getText().toString();
-                                ;
+
                                 if (location.length() > 0) {
                                     final Dialog progressDialog = ProgressDialog.show(getActivity(), "", "Adding Event...", true);
 
@@ -106,6 +108,7 @@ public class AddEvent extends Fragment {
                                             }
                                         }
                                     });
+                                    ParseUtilities.updateAllEvents();
                                 } else {
                                     displayErrorMessage("Please enter a location for your event!");
                                 }

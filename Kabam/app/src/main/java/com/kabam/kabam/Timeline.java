@@ -29,14 +29,15 @@ public class Timeline extends ListFragment {
     public void onListItemClick(ListView l, View v, int position, long id) {
         super.onListItemClick(l, v, position, id);
 
-//        String selectedClassObjectID = ((ClassQueryAdapter)getListAdapter()).getItem(position).getObjectId();
-//        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-//        Bundle bundle = new Bundle();
-//        bundle.putString("class", selectedClassObjectID);
-//        ClassDetail classDetail = new ClassDetail();
-//        classDetail.setArguments(bundle);
-//        ft.replace(R.id.fragmentContainer, classDetail);
-//        ft.addToBackStack("class detail");
-//        ft.commit();
+        Event event = ((TimelineQueryAdapter)getListAdapter()).getItem(position);
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        Bundle bundle = new Bundle();
+        bundle.putString("event", event.getObjectId());
+        bundle.putString("class", event.getEventClass().getObjectId());
+        EventDetails eventDetails = new EventDetails();
+        eventDetails.setArguments(bundle);
+        ft.replace(R.id.fragmentContainer, eventDetails);
+        ft.addToBackStack("event detail");
+        ft.commit();
     }
 }

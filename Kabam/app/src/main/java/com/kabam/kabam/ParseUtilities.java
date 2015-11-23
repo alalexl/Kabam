@@ -18,6 +18,7 @@ public class ParseUtilities {
 
     private static HashMap<String, ParseUser> allUsers;
     private static HashMap<String, Class> allClasses;
+    private static HashMap<String, Event> allEvents;
     private static HashMap<String, ParseObject> allConversations;
 
     public static void updateAllUsers() {
@@ -48,6 +49,26 @@ public class ParseUtilities {
                     allClasses = new HashMap<>();
                     for (int i = 0; i < results.size(); i++) {
                         allClasses.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
+
+    public static Event getEvent(String eventId) {
+        return allEvents.get(eventId);
+    }
+
+    public static void updateAllEvents() {
+        ParseQuery<Event> classQuery = ParseQuery.getQuery("Event");
+        classQuery.setLimit(1000);
+        classQuery.findInBackground(new FindCallback<Event>() {
+            @Override
+            public void done(List<Event> results, ParseException e) {
+                if (e == null) {
+                    allEvents = new HashMap<>();
+                    for (int i = 0; i < results.size(); i++) {
+                        allEvents.put(results.get(i).getObjectId(), results.get(i));
                     }
                 }
             }
