@@ -16,8 +16,7 @@
 
             <TextView
                 android:id="@+id/participants"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TVTheme.Small"
                 android:textSize="15dp"
                 android:text="Neil, Drew"
                 android:paddingBottom="5dp"
@@ -31,8 +30,7 @@
             </TextView>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/TVTheme.Small"
                 android:text="Oct 17"
                 android:id="@+id/time"
                 android:layout_centerVertical="true"
@@ -43,7 +41,7 @@
         </RelativeLayout>
 
         <TextView
-            android:layout_width="match_parent"
+            style="@style/TVTheme.Medium"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="Last message content"

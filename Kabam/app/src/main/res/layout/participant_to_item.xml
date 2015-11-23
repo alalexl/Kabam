@@ -15,6 +15,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:textAppearance="@style/TVTheme.Medium"
             android:id="@+id/user_name"
             android:text="John Doe"
             android:padding="3dp" />

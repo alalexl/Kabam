@@ -14,16 +14,14 @@
             android:layout_width="1dp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TVTheme.Large"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="ClassHere"
             android:id="@+id/addEventClass"
             android:layout_gravity="center_horizontal" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TVTheme.Medium"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="x Enrolled"
             android:id="@+id/addEventNumEnrolled"
@@ -38,13 +36,13 @@
             android:background="#000000" />
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ETTheme.Wide"
+            android:background="@drawable/red_edittext"
+            android:layout_marginTop="10dp"
             android:inputType="textPersonName"
             android:hint="@string/event_name"
             android:ems="15"
             android:id="@+id/addEventEventName"
-            android:layout_gravity="center_horizontal"
             android:singleLine="true"
             android:editable="true" />
 
@@ -64,6 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_width="wrap_content">
             <RadioButton
+                android:buttonTint="#fff55454"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Assignment"
@@ -84,13 +83,12 @@
             android:layout_width="1dp" />
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ETTheme.Wide"
+            android:background="@drawable/red_edittext"
             android:inputType="textPersonName"
             android:hint="@string/event_date_due_date"
             android:ems="15"
             android:id="@+id/addEventDueDate"
-            android:layout_gravity="center_horizontal"
             android:singleLine="true"
             android:editable="true" />
 
@@ -109,13 +107,12 @@
             android:layout_width="1dp" />
 
         <EditText
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/ETTheme.Wide"
+            android:background="@drawable/red_edittext"
             android:inputType="textPersonName"
             android:hint="Event Location"
             android:ems="15"
             android:id="@+id/addEventLocation"
-            android:layout_gravity="center_horizontal"
             android:singleLine="true"
             android:editable="true" />
 
@@ -133,11 +130,10 @@
             android:layout_height="20dp"
             android:layout_width="1dp" />
         <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/BTheme.Medium"
+            android:background="@drawable/red_button_wide"
             android:text="Submit"
             android:id="@+id/addEventSubmitButton"
-            android:layout_gravity="center_horizontal"
             android:nestedScrollingEnabled="true" />
         <Space
             android:layout_height="30dp"
