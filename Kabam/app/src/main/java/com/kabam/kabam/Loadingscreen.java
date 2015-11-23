@@ -10,7 +10,7 @@ import android.os.Handler;
  */
 public class LoadingScreen extends Activity {
 
-    private static int SPLASH_TIME_OUT = 1;
+    private static int SPLASH_TIME_OUT = 1500;
 
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
