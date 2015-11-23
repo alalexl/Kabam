@@ -1,6 +1,7 @@
 package com.kabam.kabam;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.net.Uri;
@@ -11,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -228,6 +230,9 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
 
             case R.id.sendButton:
                 Log.d("Activity", "Send button pressed");
+
+                InputMethodManager imm = (InputMethodManager)getService();
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 sendMessage();
                 break;
 
@@ -236,6 +241,10 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                 showParticipantPicker();
                 break;
         }
+    }
+
+    private Object getService(){
+        return this.getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
     }
 
     //The Authenticated User is actually sending a Message to this Conversation
