@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.parse.SaveCallback;
 
+import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +27,9 @@ import java.util.Date;
  * Created by tanke_000 on 11/20/2015.
  */
 public class AddEvent extends Fragment {
+    //TIME HERE
+    private Time t;
+
 
     private Class selectedClass;
 
@@ -42,9 +47,9 @@ public class AddEvent extends Fragment {
         final RadioButton isAssignment = (RadioButton)view.findViewById(R.id.addEventIsAssignment);
 
         EditText dueDateText = (EditText)view.findViewById(R.id.addEventDueDate);
-        dueDateText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
-           @Override
-            public void onFocusChange(View v, boolean hasfocus){
+        dueDateText.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasfocus) {
                 if (hasfocus) {
                     DialogFragment newFragment = new DateDialog(getView());
                     newFragment.show(getActivity().getFragmentManager(), "date_picker");
@@ -55,7 +60,13 @@ public class AddEvent extends Fragment {
 
         view.findViewById(R.id.addEventSubmitButton).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //HERE IS THE TIME, GET A NOTIFICATION(debug)
+                TimePicker timePicker=(TimePicker) getView().findViewById(R.id.addEventTimePicker);
+                t=new Time(timePicker.getCurrentHour(),timePicker.getCurrentMinute(),0);
+
                 if (selectedClass != null) {
+                    //ADDED TIME HERE
+
                     String title = ((EditText) getView().findViewById(R.id.addEventEventName)).getText().toString();
                     if (title.length() > 0) {
                         boolean assignment = isAssignment.isChecked();
@@ -71,7 +82,8 @@ public class AddEvent extends Fragment {
                         if (date != null) {
                             String description = ((EditText) getView().findViewById(R.id.addEventDescription)).getText().toString();
                             if (description.length() > 0) {
-                                String location = ((EditText) getView().findViewById(R.id.addEventLocation)).getText().toString();;
+                                String location = ((EditText) getView().findViewById(R.id.addEventLocation)).getText().toString();
+                                ;
                                 if (location.length() > 0) {
                                     final Dialog progressDialog = ProgressDialog.show(getActivity(), "", "Adding Event...", true);
 

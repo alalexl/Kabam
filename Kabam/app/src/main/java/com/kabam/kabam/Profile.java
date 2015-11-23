@@ -14,11 +14,13 @@ import com.parse.ParseUser;
 /**
  * Created by Ayush on 11/16/15.
  */
+//(KEVIN) ADDED ACTIONLISTENER TO TIMELINE BUTTON TO OPEN ADD_EVENT PAGE
 public class Profile extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile, container, false);
+
         view.findViewById(R.id.logOut).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

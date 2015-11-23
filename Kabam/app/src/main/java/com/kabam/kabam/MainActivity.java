@@ -3,7 +3,12 @@ package com.kabam.kabam;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -95,6 +100,7 @@ public class MainActivity extends FragmentActivity {
                 ft.replace(R.id.fragmentContainer, new Search());
                 ft.addToBackStack("search");
                 ft.commit();
+
                 //TESTED ADD_EVENT CODE HERE, CHANGE BACK TO WHATEVER
 
 //                ClassDetail c = new ClassDetail();

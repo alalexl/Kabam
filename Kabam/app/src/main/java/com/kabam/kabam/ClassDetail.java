@@ -10,11 +10,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 import com.kabam.kabam.Adapters.ConversationQueryAdapter;
 import com.kabam.kabam.Adapters.QueryAdapter;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.layer.sdk.messaging.Conversation;
+
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by Alex on 11/19/15.
@@ -66,7 +77,8 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
                 enrollButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        enrollButton.setVisibility(View.GONE);
+                        ParseUtilities.enrollStudentInClass(selectedClass);
+                        ((TextView)getView().findViewById(R.id.classEnrolled)).setText(selectedClass.getEnrollCount());
                         enrolled = true;
                         refreshButtons();
                     }
@@ -105,7 +117,19 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             getActivity().getSupportFragmentManager().popBackStack();
         }
 
-        refreshButtons();
+        ParseRelation<Class> classes = ParseUser.getCurrentUser().getRelation("enrolled");
+        ParseQuery<Class> query = classes.getQuery();
+        query.whereEqualTo("objectId", selectedClass.getObjectId());
+        query.findInBackground(new FindCallback<Class>() {
+            @Override
+            public void done(List<Class> objects, ParseException e) {
+                if (e == null) {
+                    if (objects.size() > 0)
+                        enrolled = true;
+                }
+                refreshButtons();
+            }
+        });
 
         if (selectedClass != null) {
             RecyclerView rView = (RecyclerView)view.findViewById(R.id.chatView);
@@ -205,35 +229,57 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
         Log.d("Activity", "Setting conversation view");
 
         //Grab the Recycler View and list all conversation objects in a vertical list
-        RecyclerView conversationsView = (RecyclerView) view.findViewById(R.id.chatView);
+        final RecyclerView conversationsView = (RecyclerView) view.findViewById(R.id.chatView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         conversationsView.setLayoutManager(layoutManager);
 
         //The Query Adapter drives the recycler view, and calls back to this activity when the user
         // taps on a Conversation
-        mConversationsAdapter = new ConversationQueryAdapter(this.getActivity().getApplicationContext(), LayerImpl.getLayerClient(), this, new QueryAdapter.Callback() {
+        ParseQuery<ParseObject> conversationsForClass = new ParseQuery<>("Conversation");
+        conversationsForClass.whereEqualTo("class", selectedClass);
+        final List<String> conversationIds = new LinkedList<>();
+
+        conversationsForClass.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void onItemInserted() {
-                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
+                    }
+
+                    if (conversationIds.size() == 0) {
+                        RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
+                        rView.setVisibility(View.GONE);
+                    } else {
+                        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
+                            @Override
+                            public void onItemInserted() {
+                                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+                            }
+                        }, conversationIds);
+
+                        //Attach the Query Adapter to the Recycler View
+                        conversationsView.setAdapter(mConversationsAdapter);
+
+                        //Execute the Query
+                        mConversationsAdapter.refresh();
+                    }
+                }
             }
         });
-
-        //Attach the Query Adapter to the Recycler View
-        conversationsView.setAdapter(mConversationsAdapter);
-
-        //Execute the Query
-        mConversationsAdapter.refresh();
     }
+
 
     //Callback from the Query Adapter. When the user taps a Conversation, grab its ID and start
     // a MessageActivity to display all the messages
+
     public void onConversationClick(Conversation conversation) {
         Log.d("Activity", "Conversation clicked: " + conversation.getId());
 
         //If the Conversation is valid, start the MessageActivity and pass in the Conversation ID
         if (conversation != null && conversation.getId() != null && !conversation.isDeleted()) {
 
-            Bundle bundle=new Bundle();
+            Bundle bundle = new Bundle();
             bundle.putString("conversation-id", conversation.getId().toString());
 
             FragmentTransaction ft = this.getActivity().getSupportFragmentManager().beginTransaction();

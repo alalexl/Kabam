@@ -31,7 +31,6 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
 
     //Inflates the view associated with each Conversation object returned by the Query
     private final LayoutInflater mInflater;
-
     //Handle the callbacks when the Conversation item is actually clicked. In this case, the
     // ConversationsActivity class implements the ConversationClickHandler
     private final ConversationClickHandler mConversationClickHandler;
@@ -76,11 +75,22 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
 
     //Constructor for the ConversationQueryAdapter
     //Sorts all conversations by last message received (ie, downloaded to the device)
-    public ConversationQueryAdapter(Context context, LayerClient client, ConversationClickHandler conversationClickHandler, Callback callback, Set<String> conversationIds) {
+    public ConversationQueryAdapter(Context context, LayerClient client, ConversationClickHandler conversationClickHandler, Callback callback, List<String> conversationIds) {
+        // existing items predicate
+        super(client, Query.builder(Conversation.class)
+                    .sortDescriptor(new SortDescriptor(Conversation.Property.LAST_MESSAGE_RECEIVED_AT, SortDescriptor.Order.DESCENDING))
+                    .predicate(new Predicate(Conversation.Property.ID, Predicate.Operator.IN, conversationIds))
+                    .build(), callback);
+
+        //Sets the LayoutInflator and Click callback handler
+        mInflater = LayoutInflater.from(context);
+        mConversationClickHandler = conversationClickHandler;
+    }
+
+    public ConversationQueryAdapter(Context context, LayerClient client, ConversationClickHandler conversationClickHandler, Callback callback) {
         // existing items predicate
         super(client, Query.builder(Conversation.class)
                 .sortDescriptor(new SortDescriptor(Conversation.Property.LAST_MESSAGE_RECEIVED_AT, SortDescriptor.Order.DESCENDING))
-                .predicate(new Predicate(Message.Property.ID, Predicate.Operator.IN, conversationIds))
                 .build(), callback);
 
         //Sets the LayoutInflator and Click callback handler
