@@ -8,8 +8,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import com.kabam.kabam.Layer.LayerImpl;
-import com.kabam.kabam.MainActivity;
-import com.kabam.kabam.NotificationThread;
 import com.kabam.kabam.ParseUtilities;
 import com.kabam.kabam.R;
 import com.layer.sdk.LayerClient;
@@ -17,7 +15,6 @@ import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
-import com.parse.Parse;
 import com.parse.ParseUser;
 
 import java.util.List;

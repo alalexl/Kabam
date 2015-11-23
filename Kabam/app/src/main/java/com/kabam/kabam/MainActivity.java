@@ -36,8 +36,6 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Initialize notification thread
-        NotificationThread noti=new NotificationThread(this);
         // Initialize FacebookSDK
         FacebookSdk.sdkInitialize(getApplicationContext());
 
@@ -99,8 +97,6 @@ public class MainActivity extends FragmentActivity {
 
             case R.id.action_search:
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                ft.replace(R.id.fragmentContainer, new Chat());
-                ft.addToBackStack("chat_screen");
                 ft.replace(R.id.fragmentContainer, new Search());
                 ft.addToBackStack("search");
                 ft.commit();

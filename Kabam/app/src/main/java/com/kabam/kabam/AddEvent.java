@@ -63,8 +63,6 @@ public class AddEvent extends Fragment {
                 //HERE IS THE TIME, GET A NOTIFICATION(debug)
                 TimePicker timePicker=(TimePicker) getView().findViewById(R.id.addEventTimePicker);
                 t=new Time(timePicker.getCurrentHour(),timePicker.getCurrentMinute(),0);
-                NotificationThread.notifyOnce(t.toString());
-
 
                 if (selectedClass != null) {
                     //ADDED TIME HERE
