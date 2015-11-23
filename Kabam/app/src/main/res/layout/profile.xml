@@ -3,12 +3,9 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="50dp" />
     <TextView
         style="@style/TVTheme.Large.GC"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="20dp"
         android:textSize="30dp"
         android:text="Ayush Saraswat"
         android:id="@+id/name" />
@@ -38,7 +35,8 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:src="@drawable/blitz"
+        android:src="@drawable/blitz2"
         android:layout_marginTop="40dp"
         />
+
 </LinearLayout>
