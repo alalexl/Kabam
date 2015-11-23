@@ -1,15 +1,20 @@
 package com.kabam.kabam;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import com.parse.ParseUser;
+import com.kabam.kabam.Adapters.ConversationQueryAdapter;
+import com.kabam.kabam.Adapters.QueryAdapter;
+import com.kabam.kabam.Layer.LayerImpl;
+import com.layer.sdk.messaging.Conversation;
 
 /**
  * Created by Alex on 11/19/15.
@@ -18,6 +23,9 @@ public class ClassDetail extends Fragment {
 
     private Class selectedClass;
     private EventQueryAdapter classEvents;
+
+    private ConversationQueryAdapter mConversationsAdapter;
+    private View view;
     private Boolean enrolled = false;
     private ListView classDetailList;
     private View enrollButton, eventButton, addEventButton, chatButton, addChatButton;
