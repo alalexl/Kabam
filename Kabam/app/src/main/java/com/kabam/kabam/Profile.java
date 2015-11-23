@@ -20,17 +20,7 @@ public class Profile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.profile, container, false);
-        view.findViewById(R.id.logOut).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ParseUser.logOut();
-                Log.d("Log Out", "Logging out.");
-                getActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
-
         
-        ((TextView) view.findViewById(R.id.name)).setText(ParseUser.getCurrentUser().get("first_name") + " " + ParseUser.getCurrentUser().get("last_name"));
         return view;
     }
 }
