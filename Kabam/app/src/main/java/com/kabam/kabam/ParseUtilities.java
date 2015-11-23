@@ -83,6 +83,10 @@ public class ParseUtilities {
         return allClasses.get(classID);
     }
 
+    public static ParseObject getConversation(String layerID) {
+        return allConversations.get(layerID);
+    }
+
     public static void addConversationToParse(String conversationId, String title, String classId) {
         ParseObject conversation = new ParseObject("Conversation");
         conversation.put("conversationId", conversationId);

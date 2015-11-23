@@ -122,26 +122,29 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
         }
 
         //Log.d("WTF", "binding conversation: " + conversation.getId() + " with participants: " + conversation.getParticipants().toString());
-        Log.d("Ben10", "Conversation ID: " + conversation.getId().toString());
+
         //Set the Conversation (so when this item is clicked, we can start a MessageActivity and
         // show all the messages associated with it)
         viewHolder.conversation = conversation;
 
         //Go through all the User IDs in the Conversation and find the matching human readable
         // handles from Parse
-        String participants = "";
-        List<String> users = conversation.getParticipants();
-        for(int i = 0; i < users.size(); i++){
-            if(!users.get(i).equals(ParseUser.getCurrentUser().getObjectId())){
-                //Format the String so there is a comma after every username
-                if(participants.length() > 0)
-                    participants += ", ";
+        String title = ParseUtilities.getConversation(conversation.getId().toString()).getString("title");
 
-                //Add the human readable username to the String
-                participants += ParseUtilities.getName(users.get(i));
-            }
-        }
-        viewHolder.participants.setText(participants);
+
+//        List<String> users = conversation.getParticipants();
+//        for(int i = 0; i < users.size(); i++){
+//            if(!users.get(i).equals(ParseUser.getCurrentUser().getObjectId())){
+//                //Format the String so there is a comma after every username
+//                if(participants.length() > 0)
+//                    participants += ", ";
+//
+//                //Add the human readable username to the String
+//                participants += ParseUtilities.getName(users.get(i));
+//            }
+//        }
+
+        viewHolder.participants.setText(title);
 
         //Grab the last message in the conversation and show it in the format "sender: last message content"
         Message message = conversation.getLastMessage();
