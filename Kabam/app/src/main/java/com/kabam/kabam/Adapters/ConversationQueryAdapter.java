@@ -14,6 +14,7 @@ import com.kabam.kabam.R;
 import com.layer.sdk.LayerClient;
 import com.layer.sdk.messaging.Conversation;
 import com.layer.sdk.messaging.Message;
+import com.layer.sdk.query.CompoundPredicate;
 import com.layer.sdk.query.Predicate;
 import com.layer.sdk.query.Query;
 import com.layer.sdk.query.SortDescriptor;
@@ -75,11 +76,10 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
 
     //Constructor for the ConversationQueryAdapter
     //Sorts all conversations by last message received (ie, downloaded to the device)
-    public ConversationQueryAdapter(Context context, LayerClient client, ConversationClickHandler conversationClickHandler, Callback callback, List<String> conversationIds) {
+    public ConversationQueryAdapter(Context context, LayerClient client, ConversationClickHandler conversationClickHandler, Callback callback, List<Predicate> conversationIds) {
         // existing items predicate
-        super(client, Query.builder(Conversation.class)
+        super(client, Query.builder(Conversation.class).predicate(new CompoundPredicate(CompoundPredicate.Type.OR, conversationIds))
                     .sortDescriptor(new SortDescriptor(Conversation.Property.LAST_MESSAGE_RECEIVED_AT, SortDescriptor.Order.DESCENDING))
-                    .predicate(new Predicate(Conversation.Property.ID, Predicate.Operator.IN, conversationIds))
                     .build(), callback);
 
         //Sets the LayoutInflator and Click callback handler
@@ -129,20 +129,9 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
 
         //Go through all the User IDs in the Conversation and find the matching human readable
         // handles from Parse
-        String title = ParseUtilities.getConversation(conversation.getId().toString()).getString("title");
-
-
-//        List<String> users = conversation.getParticipants();
-//        for(int i = 0; i < users.size(); i++){
-//            if(!users.get(i).equals(ParseUser.getCurrentUser().getObjectId())){
-//                //Format the String so there is a comma after every username
-//                if(participants.length() > 0)
-//                    participants += ", ";
-//
-//                //Add the human readable username to the String
-//                participants += ParseUtilities.getName(users.get(i));
-//            }
-//        }
+        String title = null;
+        if (ParseUtilities.getConversation(conversation.getId().toString()) != null)
+            title = ParseUtilities.getConversation(conversation.getId().toString()).getString("title");
 
         viewHolder.participants.setText(title);
 

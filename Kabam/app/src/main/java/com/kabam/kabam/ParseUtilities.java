@@ -35,6 +35,10 @@ public class ParseUtilities {
         });
     }
 
+    public static boolean isGhost(String id) {
+        return allUsers.get(id).getBoolean("ghost");
+    }
+
     public static Set getUserList() {
         return allUsers.keySet();
     }

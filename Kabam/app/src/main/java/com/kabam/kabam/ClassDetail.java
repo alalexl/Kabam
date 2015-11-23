@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.layer.sdk.query.Predicate;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -93,6 +94,8 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.class_detail, container, false);
+
+        ParseUtilities.updateAllConversations();
 
         LayerImpl.initialize(this.getActivity().getApplicationContext());
         LayerImpl.setContext(this);
@@ -252,51 +255,52 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 
         //The Query Adapter drives the recycler view, and calls back to this activity when the user
         // taps on a Conversation
-//        ParseQuery<ParseObject> conversationsForClass = new ParseQuery<>("Conversation");
-//        conversationsForClass.whereEqualTo("class", selectedClass);
-//        final List<String> conversationIds = new LinkedList<>();
-//
-//        conversationsForClass.findInBackground(new FindCallback<ParseObject>() {
-//            @Override
-//            public void done(List<ParseObject> objects, ParseException e) {
-//                if (e == null) {
-//                    for (int i = 0; i < objects.size(); i++) {
-//                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
-//                    }
-//
-//                    if (conversationIds.size() == 0) {
-//                        RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
-//                        rView.setVisibility(View.GONE);
-//                    } else {
-//                        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
-//                            @Override
-//                            public void onItemInserted() {
-//                                Log.d("Activity", "Conversation Adapter, new conversation inserted");
-//                            }
-//                        }, conversationIds);
-//
-//                        //Attach the Query Adapter to the Recycler View
-//                        conversationsView.setAdapter(mConversationsAdapter);
-//
-//                        //Execute the Query
-//                        mConversationsAdapter.refresh();
-//                    }
-//                }
-//            }
-//        });
+        ParseQuery<ParseObject> conversationsForClass = new ParseQuery<>("Conversation");
+        conversationsForClass.whereEqualTo("class", selectedClass);
+        final List<Predicate> conversationIds = new LinkedList<>();
 
-        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
+        conversationsForClass.findInBackground(new FindCallback<ParseObject>() {
             @Override
-            public void onItemInserted() {
-                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+            public void done(List<ParseObject> objects, ParseException e) {
+                if (e == null) {
+                    for (int i = 0; i < objects.size(); i++) {
+                        Predicate predicate = new Predicate(Conversation.Property.ID, Predicate.Operator.EQUAL_TO, ((ParseObject)objects.get(i)).getString("conversationId"));
+                        conversationIds.add(predicate);
+                    }
+
+                    if (conversationIds.size() == 0) {
+                        RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
+                        rView.setVisibility(View.GONE);
+                    } else {
+                        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
+                            @Override
+                            public void onItemInserted() {
+                                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+                            }
+                        }, conversationIds);
+
+                        //Attach the Query Adapter to the Recycler View
+                        conversationsView.setAdapter(mConversationsAdapter);
+
+                        //Execute the Query
+                        mConversationsAdapter.refresh();
+                    }
+                }
             }
         });
 
-        //Attach the Query Adapter to the Recycler View
-        conversationsView.setAdapter(mConversationsAdapter);
+//        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
+//            @Override
+//            public void onItemInserted() {
+//                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+//            }
+//        });
 
-        //Execute the Query
-        mConversationsAdapter.refresh();
+//        //Attach the Query Adapter to the Recycler View
+//        conversationsView.setAdapter(mConversationsAdapter);
+//
+//        //Execute the Query
+//        mConversationsAdapter.refresh();
     }
 
 

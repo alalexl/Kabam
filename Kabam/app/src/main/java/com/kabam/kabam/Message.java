@@ -21,10 +21,13 @@ import com.kabam.kabam.Adapters.MessageQueryAdapter;
 import com.kabam.kabam.Adapters.QueryAdapter;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.layer.sdk.messaging.Conversation;
+import com.layer.sdk.messaging.ConversationOptions;
 import com.layer.sdk.messaging.MessagePart;
+import com.parse.CountCallback;
 import com.parse.FindCallback;
 import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
@@ -153,7 +156,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
         TextView[] participantList = new TextView[participantIds.size()-1];
         int idx = 0;
         for(String id : participantIds){
-            if(!id.equals(LayerImpl.getLayerClient().getAuthenticatedUserId())){
+            if(!id.equals(LayerImpl.getLayerClient().getAuthenticatedUserId()) && !ParseUtilities.isGhost(id)) {
 
                 //Create a new stylized text view
                 TextView tv = new TextView(this.getContext());
@@ -239,16 +242,17 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
     private void sendMessage(){
 
         //First Check to see if we have a valid Conversation object
-        if(mConversation == null){
+        if(mConversation == null) {
             //Make sure there are valid participants. Since the Authenticated user will always be
             // included in a new Conversation, we check to see if there is more than one target participant
             if(mTargetParticipants.size() > 1) {
 
                 //Create a new conversation, and tie it to the QueryAdapter
                 mConversation = LayerImpl.getLayerClient().newConversation(mTargetParticipants);
+
                 createMessagesAdapter();
 
-                EditText title = (EditText)view.findViewById(R.id.chatTitle);
+                EditText title = (EditText) view.findViewById(R.id.chatTitle);
                 String titleText = getTextAsString(title);
 
                 ParseUtilities.addConversationToParse(mConversation.getId().toString(), titleText, getArguments().getString("class"));
@@ -258,6 +262,7 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                 // after a Conversation has been created
                 hideAddParticipantsButton();
 
+                ParseUtilities.updateAllConversations();
             } else {
                 showAlert("Send Message Error","You need to specify at least one participant before sending a message.");
                 return;
@@ -265,19 +270,17 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
         }
 
         //Grab the user's input
-        EditText input = (EditText)view.findViewById(R.id.textInput);
-        String text = getTextAsString(input);
+        final EditText input = (EditText)view.findViewById(R.id.textInput);
+        final String text = getTextAsString(input);
 
 
         //If the input is valid, create a new Message and send it to the Conversation
         if(mConversation != null && text != null && text.length() > 0){
-
             MessagePart part = LayerImpl.getLayerClient().newMessagePart(text);
             com.layer.sdk.messaging.Message msg = LayerImpl.getLayerClient().newMessage(part);
             mConversation.send(msg);
 
             input.setText("");
-
         } else {
             showAlert("Send Message Error","You cannot send an empty message.");
         }
@@ -324,8 +327,9 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
 
                     //Go through each friend and create a Checkbox with a human readable name mapped to the
                     // Object ID
+                    String ghostId = null;
                     for (int i = 0; i < results.size(); i++){
-                        if (results.get(i) != ParseUser.getCurrentUser()){
+                        if (results.get(i) != ParseUser.getCurrentUser() && !ParseUtilities.isGhost(results.get(i).getObjectId()) ) {
                             String friendId = results.get(i).getObjectId();
 
                             CheckBox friend = new CheckBox(getContext());
@@ -338,14 +342,16 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                             checkboxList.addView(friend);
 
                             allUsers.put(friend, friendId);
+                        } else if (ParseUtilities.isGhost(results.get(i).getObjectId())) {
+                            ghostId = results.get(i).getObjectId();
                         }
-
                     }
 
                     //Add the list of CheckBoxes to the Alert Dialog
                     helpBuilder.setView(checkboxList);
 
                     //When the user is done adding/removing participants, update the list of target users
+                    final String finalGhostId = ghostId;
                     helpBuilder.setPositiveButton("Done",
                             new DialogInterface.OnClickListener() {
 
@@ -365,6 +371,10 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                                             mTargetParticipants.add(friendID);
                                         }
                                     }
+
+                                    if (finalGhostId != null)
+                                        mTargetParticipants.add(finalGhostId);
+
 
                                     Log.d("Activity", "Current participants: " + mTargetParticipants.toString());
 
