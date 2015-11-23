@@ -235,38 +235,51 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 
         //The Query Adapter drives the recycler view, and calls back to this activity when the user
         // taps on a Conversation
-        ParseQuery<ParseObject> conversationsForClass = new ParseQuery<>("Conversation");
-        conversationsForClass.whereEqualTo("class", selectedClass);
-        final List<String> conversationIds = new LinkedList<>();
+//        ParseQuery<ParseObject> conversationsForClass = new ParseQuery<>("Conversation");
+//        conversationsForClass.whereEqualTo("class", selectedClass);
+//        final List<String> conversationIds = new LinkedList<>();
+//
+//        conversationsForClass.findInBackground(new FindCallback<ParseObject>() {
+//            @Override
+//            public void done(List<ParseObject> objects, ParseException e) {
+//                if (e == null) {
+//                    for (int i = 0; i < objects.size(); i++) {
+//                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
+//                    }
+//
+//                    if (conversationIds.size() == 0) {
+//                        RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
+//                        rView.setVisibility(View.GONE);
+//                    } else {
+//                        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
+//                            @Override
+//                            public void onItemInserted() {
+//                                Log.d("Activity", "Conversation Adapter, new conversation inserted");
+//                            }
+//                        }, conversationIds);
+//
+//                        //Attach the Query Adapter to the Recycler View
+//                        conversationsView.setAdapter(mConversationsAdapter);
+//
+//                        //Execute the Query
+//                        mConversationsAdapter.refresh();
+//                    }
+//                }
+//            }
+//        });
 
-        conversationsForClass.findInBackground(new FindCallback<ParseObject>() {
+        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
             @Override
-            public void done(List<ParseObject> objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
-                    }
-
-                    if (conversationIds.size() == 0) {
-                        RecyclerView rView = (RecyclerView) getView().findViewById(R.id.chatView);
-                        rView.setVisibility(View.GONE);
-                    } else {
-                        mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), ClassDetail.this, new QueryAdapter.Callback() {
-                            @Override
-                            public void onItemInserted() {
-                                Log.d("Activity", "Conversation Adapter, new conversation inserted");
-                            }
-                        }, conversationIds);
-
-                        //Attach the Query Adapter to the Recycler View
-                        conversationsView.setAdapter(mConversationsAdapter);
-
-                        //Execute the Query
-                        mConversationsAdapter.refresh();
-                    }
-                }
+            public void onItemInserted() {
+                Log.d("Activity", "Conversation Adapter, new conversation inserted");
             }
         });
+
+        //Attach the Query Adapter to the Recycler View
+        conversationsView.setAdapter(mConversationsAdapter);
+
+        //Execute the Query
+        mConversationsAdapter.refresh();
     }
 
 
