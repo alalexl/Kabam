@@ -23,6 +23,7 @@ public class ParseUtilities {
 
     public static void updateAllUsers() {
         ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
+        userQuery.setLimit(1000);
         userQuery.findInBackground(new FindCallback<ParseUser>() {
             public void done(List<ParseUser> results, ParseException e) {
                 if (e == null) {
@@ -36,6 +37,7 @@ public class ParseUtilities {
     }
 
     public static boolean isGhost(String id) {
+        if (allUsers.get(id) == null) return true;
         return allUsers.get(id).getBoolean("ghost");
     }
 
@@ -123,7 +125,7 @@ public class ParseUtilities {
     public static void enrollStudentInClass(Class currentClass) {
         ParseRelation<Class> enrolled = ParseUser.getCurrentUser().getRelation("enrolled");
         enrolled.add(currentClass);
-        currentClass.put("enrolled", (currentClass.getNumber("enrolled") == null) ? 1 : currentClass.getNumber("enrolled").intValue() + 1);
+        currentClass.increment("enrolled");
         ParseUser.getCurrentUser().saveInBackground();
         currentClass.saveInBackground();
     }

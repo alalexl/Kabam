@@ -49,7 +49,6 @@ public class MainActivity extends FragmentActivity {
         ParseObject.registerSubclass(Post.class);
         ParseObject.registerSubclass(Event.class);
 
-//        Parse.enableLocalDatastore(this);
         Parse.initialize(this, "TnpAVtQJyj1fBngIFSKjRcWuMh3g8VwtWsjXw2sV", "oZZa2IMMaFQOgV20qLA84DkqWWCA8EpUDWZeUHV9");
         ParseFacebookUtils.initialize(getApplicationContext());
 

@@ -29,7 +29,7 @@ public class Profile extends Fragment {
                 getActivity().getSupportFragmentManager().popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
             }
         });
-        ((TextView) view.findViewById(R.id.name)).setText(ParseUtilities.getName(ParseUser.getCurrentUser().getObjectId()));
+        ((TextView) view.findViewById(R.id.name)).setText(ParseUser.getCurrentUser().get("first_name") + " " + ParseUser.getCurrentUser().get("last_name"));
 
         view.findViewById(R.id.timeline).setOnClickListener(new View.OnClickListener() {
             @Override
