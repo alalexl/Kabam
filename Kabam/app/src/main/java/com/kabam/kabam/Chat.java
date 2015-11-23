@@ -16,6 +16,7 @@ import com.kabam.kabam.Adapters.QueryAdapter;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.layer.sdk.messaging.Conversation;
 import com.parse.FindCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -69,39 +70,24 @@ public class Chat extends FragmentBase implements ConversationQueryAdapter.Conve
         Log.d("Activity", "Setting conversation view");
 
         //Grab the Recycler View and list all conversation objects in a vertical list
-        final RecyclerView conversationsView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        RecyclerView conversationsView = (RecyclerView) view.findViewById(R.id.recyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false);
         conversationsView.setLayoutManager(layoutManager);
 
         //The Query Adapter drives the recycler view, and calls back to this activity when the user
         // taps on a Conversation
-        ParseQuery conversationsForClass = new ParseQuery("Conversation");
-        conversationsForClass.whereEqualTo("class", ParseUtilities.getClass("class"));
-        final Set<String> conversationIds = new HashSet<>();
-
-        conversationsForClass.findInBackground(new FindCallback() {
+        mConversationsAdapter = new ConversationQueryAdapter(this.getActivity().getApplicationContext(), LayerImpl.getLayerClient(), this, new QueryAdapter.Callback() {
             @Override
-            public void done(List objects, ParseException e) {
-                if (e == null) {
-                    for (int i = 0; i < objects.size(); i++) {
-                        conversationIds.add(((ParseObject)objects.get(i)).getString("conversationId"));
-                    }
-
-                    mConversationsAdapter = new ConversationQueryAdapter(getActivity().getApplicationContext(), LayerImpl.getLayerClient(), Chat.this, new QueryAdapter.Callback() {
-                        @Override
-                        public void onItemInserted() {
-                            Log.d("Activity", "Conversation Adapter, new conversation inserted");
-                        }
-                    }, conversationIds);
-
-                    //Attach the Query Adapter to the Recycler View
-                    conversationsView.setAdapter(mConversationsAdapter);
-
-                    //Execute the Query
-                    mConversationsAdapter.refresh();
-                }
+            public void onItemInserted() {
+                Log.d("Activity", "Conversation Adapter, new conversation inserted");
             }
         });
+
+        //Attach the Query Adapter to the Recycler View
+        conversationsView.setAdapter(mConversationsAdapter);
+
+        //Execute the Query
+        mConversationsAdapter.refresh();
     }
 
     //Callback from the Query Adapter. When the user taps a Conversation, grab its ID and start

@@ -18,6 +18,7 @@ public class ParseUtilities {
 
     private static HashMap<String, ParseUser> allUsers;
     private static HashMap<String, Class> allClasses;
+    private static HashMap<String, ParseObject> allConversations;
 
     public static void updateAllUsers() {
         ParseQuery<ParseUser> userQuery = ParseUser.getQuery();
@@ -67,6 +68,23 @@ public class ParseUtilities {
                     allClasses = new HashMap<>();
                     for (int i = 0; i < results.size(); i++) {
                         allClasses.put(results.get(i).getObjectId(), results.get(i));
+                    }
+                }
+            }
+        });
+    }
+
+    // use allConversations.get(<layerID>).get("title");
+    public static void updateAllConversations() {
+        ParseQuery<ParseObject> classQuery = ParseQuery.getQuery("Conversation");
+        classQuery.setLimit(1000);
+        classQuery.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> results, ParseException e) {
+                if (e == null) {
+                    allConversations = new HashMap<>();
+                    for (int i = 0; i < results.size(); i++) {
+                        allConversations.put(results.get(i).getString("conversationId"), results.get(i));
                     }
                 }
             }

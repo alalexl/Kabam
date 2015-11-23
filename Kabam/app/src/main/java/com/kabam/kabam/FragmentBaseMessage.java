@@ -129,6 +129,9 @@ public class FragmentBaseMessage extends Fragment implements LayerCallbacks, Vie
             LL.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
             LL.setLayoutParams(new ListView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
+            if (view == null)
+                continue;
+
             view.measure(0, 0);
             params = new LinearLayout.LayoutParams(view.getMeasuredWidth(), ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(5, 0, 5, 0);
