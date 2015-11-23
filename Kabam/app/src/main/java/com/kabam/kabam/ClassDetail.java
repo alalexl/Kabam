@@ -72,7 +72,11 @@ public class ClassDetail extends Fragment {
         view.findViewById(R.id.chatButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                Chat chat = new Chat();
+                ft.replace(R.id.fragmentContainer, chat);
+                ft.addToBackStack("add chat");
+                ft.commit();
             }
         });
 

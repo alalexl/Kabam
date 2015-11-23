@@ -9,6 +9,7 @@ import android.widget.TextView;
 import android.support.v7.widget.RecyclerView;
 import com.kabam.kabam.Layer.LayerImpl;
 import com.kabam.kabam.MainActivity;
+import com.kabam.kabam.NotificationThread;
 import com.kabam.kabam.ParseUtilities;
 import com.kabam.kabam.R;
 import com.layer.sdk.LayerClient;
@@ -28,7 +29,6 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
 
     //Inflates the view associated with each Conversation object returned by the Query
     private final LayoutInflater mInflater;
-
     //Handle the callbacks when the Conversation item is actually clicked. In this case, the
     // ConversationsActivity class implements the ConversationClickHandler
     private final ConversationClickHandler mConversationClickHandler;

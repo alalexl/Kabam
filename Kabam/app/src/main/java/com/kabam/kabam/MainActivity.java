@@ -36,6 +36,8 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Initialize notification thread
+        NotificationThread noti=new NotificationThread(this);
         // Initialize FacebookSDK
         FacebookSdk.sdkInitialize(getApplicationContext());
 
