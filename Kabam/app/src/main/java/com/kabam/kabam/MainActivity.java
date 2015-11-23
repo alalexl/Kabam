@@ -50,6 +50,7 @@ public class MainActivity extends FragmentActivity {
 
         ParseUtilities.updateAllUsers();
         ParseUtilities.updateAllClasses();
+        ParseUtilities.updateAllConversations();
         ParseUtilities.updateAllEvents();
 
         // Show Login Page if User isn't logged in
