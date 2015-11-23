@@ -9,6 +9,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <Space
+            android:layout_height="30dp"
+            android:layout_width="1dp" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -41,6 +45,7 @@
             android:ems="15"
             android:id="@+id/addEventEventName"
             android:layout_gravity="center_horizontal"
+            android:singleLine="true"
             android:editable="true" />
 
         <Space
@@ -86,7 +91,18 @@
             android:ems="15"
             android:id="@+id/addEventDueDate"
             android:layout_gravity="center_horizontal"
+            android:singleLine="true"
             android:editable="true" />
+
+        <Space
+            android:layout_height="20dp"
+            android:layout_width="1dp" />
+
+        <TimePicker
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/addEventTimePicker"
+            android:layout_gravity="center_horizontal" />
 
         <Space
             android:layout_height="20dp"
@@ -100,6 +116,7 @@
             android:ems="15"
             android:id="@+id/addEventLocation"
             android:layout_gravity="center_horizontal"
+            android:singleLine="true"
             android:editable="true" />
 
         <EditText
@@ -122,6 +139,9 @@
             android:id="@+id/addEventSubmitButton"
             android:layout_gravity="center_horizontal"
             android:nestedScrollingEnabled="true" />
+        <Space
+            android:layout_height="30dp"
+            android:layout_width="1dp" />
 
     </LinearLayout>
 </ScrollView>

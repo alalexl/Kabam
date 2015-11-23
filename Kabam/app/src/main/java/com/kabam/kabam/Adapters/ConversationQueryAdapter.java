@@ -31,7 +31,6 @@ public class ConversationQueryAdapter extends QueryAdapter<Conversation, Convers
 
     //Inflates the view associated with each Conversation object returned by the Query
     private final LayoutInflater mInflater;
-
     //Handle the callbacks when the Conversation item is actually clicked. In this case, the
     // ConversationsActivity class implements the ConversationClickHandler
     private final ConversationClickHandler mConversationClickHandler;
