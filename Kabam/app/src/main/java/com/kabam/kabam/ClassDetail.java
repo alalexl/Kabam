@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -95,6 +96,7 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 
         LayerImpl.initialize(this.getActivity().getApplicationContext());
         LayerImpl.setContext(this);
+        ParseUtilities.updateAllEvents();
 
         if (LayerImpl.isAuthenticated()){
             Log.d("Message", "User is already authenicated");
@@ -135,10 +137,25 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
             RecyclerView rView = (RecyclerView)view.findViewById(R.id.chatView);
             rView.setVisibility(View.GONE);
 
-            ListView lView = (ListView)view.findViewById(R.id.classDetailList);
+            final ListView lView = (ListView)view.findViewById(R.id.classDetailList);
             lView.setVisibility(View.VISIBLE);
+            lView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                    String eventObjectId = ((EventQueryAdapter) lView.getAdapter()).getItem(position).getObjectId();
+                    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("event", eventObjectId);
+                    bundle.putString("class", selectedClass.getObjectId());
+                    EventDetails eventDetails = new EventDetails();
+                    eventDetails.setArguments(bundle);
+                    ft.replace(R.id.fragmentContainer, eventDetails);
+                    ft.addToBackStack("event detail");
+                    ft.commit();
+                }
+            });
 
-            ((TextView)view.findViewById(R.id.className)).setText(selectedClass.getClassTitle());
+            ((TextView) view.findViewById(R.id.className)).setText(selectedClass.getClassTitle());
             ((TextView)view.findViewById(R.id.classEnrolled)).setText(selectedClass.getEnrollCount());
             classEvents = new EventQueryAdapter(getActivity(), selectedClass);
             classDetailList.setAdapter(classEvents);
@@ -203,8 +220,6 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
                 }
             }
         });
-
-
 
         return view;
     }
@@ -324,5 +339,4 @@ public class ClassDetail extends FragmentBase implements ConversationQueryAdapte
 //        Intent intent = new Intent(ConversationsActivity.this, LoginActivity.class);
 //        startActivity(intent);
     }
-
 }
