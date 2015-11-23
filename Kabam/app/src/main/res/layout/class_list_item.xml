@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
+<<<<<<< HEAD
     android:layout_height="match_parent" android:layout_marginLeft="7dp"
     android:layout_marginTop="5dp">
+=======
+    android:layout_height="match_parent" android:layout_marginLeft="7dp" android:layout_marginTop="5dp" >
+>>>>>>> 2a60d02c75ff85104f53dc23607a1bae88c6712d
     <TextView
         style="@style/TVTheme.Large"
         android:text="Class Title"

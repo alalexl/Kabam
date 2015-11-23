@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+<<<<<<< HEAD
+=======
+
+>>>>>>> 2a60d02c75ff85104f53dc23607a1bae88c6712d
     <item android:state_pressed="true" >
         <shape>
             <gradient
