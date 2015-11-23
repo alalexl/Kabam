@@ -62,8 +62,6 @@ public class AddEvent extends Fragment {
         view.findViewById(R.id.addEventSubmitButton).setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (selectedClass != null) {
-                    //ADDED TIME HERE
-
                     String title = ((EditText) getView().findViewById(R.id.addEventEventName)).getText().toString();
                     if (title.length() > 0) {
                         boolean assignment = isAssignment.isChecked();
