@@ -14,16 +14,14 @@
             android:layout_width="1dp" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TVTheme.Large"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="ClassHere"
             android:id="@+id/addEventClass"
             android:layout_gravity="center_horizontal" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/TVTheme.Medium"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="x Enrolled"
             android:id="@+id/addEventNumEnrolled"
