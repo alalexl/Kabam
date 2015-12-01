@@ -72,9 +72,12 @@ public class AddEvent extends Fragment {
                         Calendar calendar = Calendar.getInstance();
                         try {
                             date = df.parse(((EditText) getView().findViewById(R.id.addEventDueDate)).getText().toString());
+                            date.setHours(timePicker.getCurrentHour()-8);//wtf why does this make it work
+                            date.setMinutes(timePicker.getCurrentMinute());
                             calendar.set(Calendar.HOUR_OF_DAY, timePicker.getCurrentHour());
                             calendar.set(Calendar.MINUTE, timePicker.getCurrentMinute());
-                            date.setTime(calendar.getTimeInMillis());
+                            Log.d("Kevin:", timePicker.getCurrentHour()+":"+timePicker.getCurrentMinute()+"ReceivedHour="+date.getHours());
+                        //    date.setTime(calendar.getTimeInMillis());
                         } catch (ParseException e) {
                             Log.d("Exception Adding Event", e.getMessage());
                         }
