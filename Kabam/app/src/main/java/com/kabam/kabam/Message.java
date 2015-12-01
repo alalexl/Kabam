@@ -338,8 +338,9 @@ public class Message extends FragmentBaseMessage implements MessageQueryAdapter.
                     // Object ID
                     String ghostId = null;
                     for (int i = 0; i < results.size(); i++){
-                        if (results.get(i) != ParseUser.getCurrentUser() && !ParseUtilities.isGhost(results.get(i).getObjectId()) ) {
+                        if ( !results.get(i).getUsername().equals(ParseUser.getCurrentUser().getUsername()) && !ParseUtilities.isGhost(results.get(i).getObjectId()) ) {
                             String friendId = results.get(i).getObjectId();
+                            //Log.d("BEN", ParseUser.getCurrentUser().getUsername());
 
                             CheckBox friend = new CheckBox(getContext());
                             friend.setText(ParseUtilities.getName(friendId));
